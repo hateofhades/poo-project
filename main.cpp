@@ -1,6 +1,7 @@
 #include <iostream>
+#include <math.h>
 #include <SFML/Graphics.hpp>
-//comment
+
 using namespace std;
 
 class Button : public sf::Drawable
@@ -49,9 +50,59 @@ public:
     }
 };
 
+class RoundButton : public Button
+{
+    private:
+        int positionX, positionY, radius;
+        sf::Text text;
+        sf::CircleShape circle;
+        sf::Font font;
+        virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+    public:
+        RoundButton(){
+
+        };
+        RoundButton(int positionX, int positionY, int radius, string text, sf::Font font, sf::Color buttonColor, sf::Color textColor)
+        {
+            this->positionX = positionX;
+            this->positionY = positionY;
+            this->radius = radius;
+            this->font = font;
+            this->text.setString(text);
+            this->text.setCharacterSize(24);
+            this->text.setFillColor(textColor);
+            this->text.setStyle(sf::Text::Bold);
+            this->text.setFont(this->font);
+            this->text.setPosition(positionX + this->radius/2, positionY + this->radius/2 + this->text.getLocalBounds().height/2);
+            this->circle.setRadius(this->radius);
+            this->circle.setPosition(positionX, positionY);
+            this->circle.setFillColor(buttonColor);
+        };
+        bool isOver(int mouseX, int mouseY)
+        {
+            int xCenter, yCenter;
+            xCenter = this->positionX + this->radius;
+            yCenter = this->positionY + this->radius;
+
+            int distance = sqrt(pow(mouseX - xCenter, 2) + pow(mouseY - yCenter, 2));
+
+            return (distance <= this->radius);
+        }
+        void setBackgroundColor(sf::Color color)
+        {
+            this->circle.setFillColor(color);
+        }
+};
+
 void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
     target.draw(this->rect);
+    target.draw(this->text);
+};
+
+void RoundButton::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    target.draw(this->circle);
     target.draw(this->text);
 };
 
