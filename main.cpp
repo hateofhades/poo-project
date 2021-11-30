@@ -52,46 +52,47 @@ public:
 
 class RoundButton : public Button
 {
-    private:
-        int positionX, positionY, radius;
-        sf::Text text;
-        sf::CircleShape circle;
-        sf::Font font;
-        virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
-    public:
-        RoundButton(){
+private:
+    int positionX, positionY, radius;
+    sf::Text text;
+    sf::CircleShape circle;
+    sf::Font font;
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
-        };
-        RoundButton(int positionX, int positionY, int radius, string text, sf::Font font, sf::Color buttonColor, sf::Color textColor)
-        {
-            this->positionX = positionX;
-            this->positionY = positionY;
-            this->radius = radius;
-            this->font = font;
-            this->text.setString(text);
-            this->text.setCharacterSize(24);
-            this->text.setFillColor(textColor);
-            this->text.setStyle(sf::Text::Bold);
-            this->text.setFont(this->font);
-            this->text.setPosition(positionX + this->radius/2, positionY + this->radius/2 + this->text.getLocalBounds().height/2);
-            this->circle.setRadius(this->radius);
-            this->circle.setPosition(positionX, positionY);
-            this->circle.setFillColor(buttonColor);
-        };
-        bool isOver(int mouseX, int mouseY)
-        {
-            int xCenter, yCenter;
-            xCenter = this->positionX + this->radius;
-            yCenter = this->positionY + this->radius;
+public:
+    RoundButton(){
 
-            int distance = sqrt(pow(mouseX - xCenter, 2) + pow(mouseY - yCenter, 2));
+    };
+    RoundButton(int positionX, int positionY, int radius, string text, sf::Font font, sf::Color buttonColor, sf::Color textColor)
+    {
+        this->positionX = positionX;
+        this->positionY = positionY;
+        this->radius = radius;
+        this->font = font;
+        this->text.setString(text);
+        this->text.setCharacterSize(24);
+        this->text.setFillColor(textColor);
+        this->text.setStyle(sf::Text::Bold);
+        this->text.setFont(this->font);
+        this->text.setPosition(positionX + this->radius / 2, positionY + this->radius / 2 + this->text.getLocalBounds().height / 2);
+        this->circle.setRadius(this->radius);
+        this->circle.setPosition(positionX, positionY);
+        this->circle.setFillColor(buttonColor);
+    };
+    bool isOver(int mouseX, int mouseY)
+    {
+        int xCenter, yCenter;
+        xCenter = this->positionX + this->radius;
+        yCenter = this->positionY + this->radius;
 
-            return (distance <= this->radius);
-        }
-        void setBackgroundColor(sf::Color color)
-        {
-            this->circle.setFillColor(color);
-        }
+        int distance = sqrt(pow(mouseX - xCenter, 2) + pow(mouseY - yCenter, 2));
+
+        return (distance <= this->radius);
+    }
+    void setBackgroundColor(sf::Color color)
+    {
+        this->circle.setFillColor(color);
+    }
 };
 
 void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const
@@ -163,7 +164,16 @@ int main()
 
     Button startButton(1280 / 2 - 150, 300, 300, 50, "Start", font, sf::Color::Black, sf::Color::White);
     Button rulesButton(1280 / 2 - 150, 370, 300, 50, "Rules", font, sf::Color::Black, sf::Color::White);
-    Button ArrowButton(0, 0, 85, 35, "", font, sf::Color::Black, sf::Color::White);
+    Button creditsButton(1280 / 2 - 150, 440, 300, 50, "Credits", font, sf::Color::Black, sf::Color::White);
+    Button ArrowButton(0, 0, 85, 35, "", font, sf::Color::Transparent, sf::Color::Transparent);
+
+    Button *buttons[100];
+    int numButons = 0;
+
+    buttons[numButons++] = &startButton;
+    buttons[numButons++] = &rulesButton;
+    buttons[numButons++] = &creditsButton;
+    buttons[numButons++] = &ArrowButton;
 
     int test = 0;
     int poz_cursor_x = 640;
@@ -184,18 +194,26 @@ int main()
 
             if (event.type == sf::Event::MouseButtonPressed)
             {
+                poz_cursor_x = sf::Mouse::getPosition(window).x;
+                poz_cursor_y = sf::Mouse::getPosition(window).y;
+
                 if (test == 0)
-                    if (startButton.isOver(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))
+                {
+                    if (startButton.isOver(poz_cursor_x, poz_cursor_y))
                     {
                         test = 1;
                     }
-                if (test == 0)
-                    if (rulesButton.isOver(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))
+                    if (rulesButton.isOver(poz_cursor_x, poz_cursor_y))
                     {
                         test = 2;
                     }
+                    if (creditsButton.isOver(poz_cursor_x, poz_cursor_y))
+                    {
+                        test = 3;
+                    }
+                }
                 if (test > 0)
-                    if (ArrowButton.isOver(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))
+                    if (ArrowButton.isOver(poz_cursor_x, poz_cursor_y))
                     {
                         test = 0;
                     }
@@ -203,43 +221,30 @@ int main()
 
             if (event.type == sf::Event::MouseMoved)
             {
-                if (startButton.isOver(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))
-                {
-                    startButton.setBackgroundColor(sf::Color::Blue);
-                }
-                else
-                {
-                    startButton.setBackgroundColor(sf::Color::Black);
-                }
-
-                if (rulesButton.isOver(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))
-                {
-                    rulesButton.setBackgroundColor(sf::Color::Blue);
-                }
-                else
-                {
-                    rulesButton.setBackgroundColor(sf::Color::Black);
-                }
-
-                if (ArrowButton.isOver(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))
-                {
-                    ArrowButton.setBackgroundColor(sf::Color::Blue);
-                }
-                else
-                {
-                    ArrowButton.setBackgroundColor(sf::Color::Black);
-                }
-
                 poz_cursor_x = sf::Mouse::getPosition(window).x;
                 poz_cursor_y = sf::Mouse::getPosition(window).y;
+
+                for (int i = 0; i < numButons; i++)
+                {
+                    if ((*buttons[i]).isOver(poz_cursor_x, poz_cursor_y))
+                    {
+                        (*buttons[i]).setBackgroundColor(sf::Color::Blue);
+                    }
+                    else
+                    {
+                        (*buttons[i]).setBackgroundColor(sf::Color::Black);
+                        if(buttons[i] == &ArrowButton)
+                            (*buttons[i]).setBackgroundColor(sf::Color::Transparent);
+                    }
+                }
             }
         }
-
+        window.clear();
         switch (test)
         {
+
         case 1: //first level
 
-            window.clear();
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
@@ -247,7 +252,6 @@ int main()
             window.draw(leftArrowObj);
             break;
         case 2: //rules menu
-            window.clear();
             window.draw(mainMenuBackgroundObj);
             window.draw(ArrowButton);
             leftArrowObj.setPosition(0, 0);
@@ -264,9 +268,25 @@ int main()
             text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 200);
             window.draw(text);
             break;
+        case 3:
+            window.draw(mainMenuBackgroundObj);
+            window.draw(ArrowButton);
+            leftArrowObj.setPosition(0, 0);
+            window.draw(leftArrowObj);
+
+            text.setString("Credits:");
+            text.setCharacterSize(40);
+            text.setStyle(sf::Text::Bold);
+            text.setFillColor(sf::Color::Blue);
+            text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 150);
+            window.draw(text);
+            text.setString("Grigore Iulia-Andreea, 323AC\nBonciu Alin, 323AC\nCodescu Elisabeta Maria, 322AC\nPurcaru Iulia-Mihaela, 323AC\nSerban Andrei, 323AC\nVirlan Adrian, 323AC");
+            text.setCharacterSize(22);
+            text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 300);
+            window.draw(text);
+            break;
         default: //main menu
 
-            window.clear();
             window.draw(mainMenuBackgroundObj);
 
             text.setString("Learning about a bioprocess");
@@ -282,6 +302,7 @@ int main()
 
             window.draw(startButton);
             window.draw(rulesButton);
+            window.draw(creditsButton);
         }
         //draw cursor
         cursorObj.setPosition(poz_cursor_x, poz_cursor_y);
