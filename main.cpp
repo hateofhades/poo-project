@@ -50,61 +50,92 @@ public:
     }
 };
 
-class RoundButton : public Button
-{
-private:
-    int positionX, positionY, radius;
-    sf::Text text;
-    sf::CircleShape circle;
-    sf::Font font;
-    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
-
-public:
-    RoundButton(){
-
-    };
-    RoundButton(int positionX, int positionY, int radius, string text, sf::Font font, sf::Color buttonColor, sf::Color textColor)
-    {
-        this->positionX = positionX;
-        this->positionY = positionY;
-        this->radius = radius;
-        this->font = font;
-        this->text.setString(text);
-        this->text.setCharacterSize(24);
-        this->text.setFillColor(textColor);
-        this->text.setStyle(sf::Text::Bold);
-        this->text.setFont(this->font);
-        this->text.setPosition(positionX + this->radius / 2, positionY + this->radius / 2 + this->text.getLocalBounds().height / 2);
-        this->circle.setRadius(this->radius);
-        this->circle.setPosition(positionX, positionY);
-        this->circle.setFillColor(buttonColor);
-    };
-    bool isOver(int mouseX, int mouseY)
-    {
-        int xCenter, yCenter;
-        xCenter = this->positionX + this->radius;
-        yCenter = this->positionY + this->radius;
-
-        int distance = sqrt(pow(mouseX - xCenter, 2) + pow(mouseY - yCenter, 2));
-
-        return (distance <= this->radius);
-    }
-    void setBackgroundColor(sf::Color color)
-    {
-        this->circle.setFillColor(color);
-    }
-};
-
 void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
     target.draw(this->rect);
     target.draw(this->text);
 };
 
-void RoundButton::draw(sf::RenderTarget &target, sf::RenderStates states) const
+class QuestionPopup : public sf::Drawable
 {
-    target.draw(this->circle);
-    target.draw(this->text);
+private:
+    int hasPhoto;
+    sf::Texture photo;
+    sf::Sprite photoSprite;
+    string correctAnswer;
+    sf::Text question, inputAnswer, pressEnter;
+    sf::RectangleShape background, input;
+    sf::Font font;
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+
+public:
+    QuestionPopup(string question, string correctAnswer, sf::Font font)
+    {
+        this->hasPhoto = 0;
+        this->font = font;
+        this->correctAnswer = correctAnswer;
+
+        this->background.setSize(sf::Vector2f(500, 400));
+        this->background.setPosition(1280 / 2 - this->background.getSize().x / 2, 720 / 2 - this->background.getSize().y / 2);
+        this->background.setFillColor(sf::Color::Blue);
+        this->question.setString(question);
+        this->question.setCharacterSize(24);
+        this->question.setFillColor(sf::Color::White);
+        this->question.setStyle(sf::Text::Bold);
+        this->question.setFont(this->font);
+        this->question.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->question.getLocalBounds().width) / 2, this->background.getPosition().y);
+        this->input.setSize(sf::Vector2f(this->background.getSize().x - 20, 30));
+        this->input.setPosition(this->background.getPosition().x + 10, this->question.getPosition().y + this->question.getLocalBounds().height + 30);
+        this->input.setFillColor(sf::Color::White);
+
+        this->inputAnswer.setString("");
+        this->inputAnswer.setCharacterSize(18);
+        this->inputAnswer.setFillColor(sf::Color::Black);
+        this->inputAnswer.setStyle(sf::Text::Bold);
+        this->inputAnswer.setFont(this->font);
+        this->inputAnswer.setPosition(this->input.getPosition().x + (this->input.getSize().x - this->inputAnswer.getLocalBounds().width) / 2, this->input.getPosition().y + (this->input.getSize().y - this->inputAnswer.getLocalBounds().height) / 2);
+
+        this->pressEnter.setString("Press Enter to submit your answer.");
+        this->pressEnter.setCharacterSize(18);
+        this->pressEnter.setFillColor(sf::Color::White);
+        this->pressEnter.setStyle(sf::Text::Bold);
+        this->pressEnter.setFont(this->font);
+        this->pressEnter.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->pressEnter.getLocalBounds().width) / 2, this->background.getPosition().y + this->background.getSize().y - this->pressEnter.getLocalBounds().height - 10);
+    }
+    void setInputAnswer(string inputAnswer)
+    {
+        this->inputAnswer.setString(inputAnswer);
+        this->inputAnswer.setPosition(this->input.getPosition().x + (this->input.getSize().x - this->inputAnswer.getLocalBounds().width) / 2, this->input.getPosition().y + (this->input.getSize().y - this->inputAnswer.getLocalBounds().height) / 2);
+    }
+    string getInputAnswer()
+    {
+        return this->inputAnswer.getString();
+    }
+    string getCorrectAnswer()
+    {
+        return this->correctAnswer;
+    }
+    void addPhoto(string photoPath)
+    {
+        this->hasPhoto = 1;
+        this->photo.loadFromFile(photoPath);
+        this->photoSprite.setTexture(this->photo);
+        this->photoSprite.setPosition(this->background.getPosition().x + this->background.getSize().x / 2 - this->photoSprite.getGlobalBounds().width / 2, this->input.getPosition().y + this->input.getSize().y + 10);
+    }
+};
+
+void QuestionPopup::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    target.draw(this->background);
+    target.draw(this->question);
+    target.draw(this->input);
+    target.draw(this->inputAnswer);
+    target.draw(this->pressEnter);
+
+    if (this->hasPhoto)
+    {
+        target.draw(this->photoSprite);
+    }
 };
 
 int main()
@@ -181,6 +212,9 @@ int main()
 
     window.setMouseCursorVisible(false); //hide mouse cursor
 
+    QuestionPopup questionPopup("What is 'enzymatic hydrolysis' ?", "Nu stiu", font);
+    questionPopup.addPhoto("question.png");
+
     while (window.isOpen())
     {
         sf::Event event;
@@ -233,8 +267,42 @@ int main()
                     else
                     {
                         (*buttons[i]).setBackgroundColor(sf::Color::Black);
-                        if(buttons[i] == &ArrowButton)
+                        if (buttons[i] == &ArrowButton)
                             (*buttons[i]).setBackgroundColor(sf::Color::Transparent);
+                    }
+                }
+            }
+
+            if (event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::Backspace && test == 1)
+                {
+                    questionPopup.setInputAnswer(questionPopup.getInputAnswer().substr(0, questionPopup.getInputAnswer().size() - 1));
+                }
+                if (event.key.code == sf::Keyboard::Enter)
+                {
+                    if (test = 1)
+                    {
+                        if (questionPopup.getInputAnswer() == questionPopup.getCorrectAnswer())
+                        {
+                            questionPopup.setInputAnswer("");
+                            test = 0;
+                        }
+                        else
+                        {
+                            questionPopup.setInputAnswer("Your answer is wrong!");
+                        }
+                    }
+                }
+            }
+
+            if (event.type == sf::Event::TextEntered)
+            {
+                if (test == 1)
+                {
+                    if (event.text.unicode >= 32 && event.text.unicode <= 126)
+                    {
+                        questionPopup.setInputAnswer(questionPopup.getInputAnswer() + static_cast<char>(event.text.unicode));
                     }
                 }
             }
@@ -243,13 +311,15 @@ int main()
         switch (test)
         {
 
-        case 1: //first level
+        case 1: //startup password
 
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
             leftArrowObj.setPosition(0, 0);
             window.draw(leftArrowObj);
+
+            window.draw(questionPopup);
             break;
         case 2: //rules menu
             window.draw(mainMenuBackgroundObj);
