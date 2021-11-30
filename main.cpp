@@ -58,8 +58,8 @@ void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Escape Room Proiect");
-    sf::Texture background, mainMenuBackground;
-    sf::Sprite backgroundObj, mainMenuBackgroundObj;
+    sf::Texture background, mainMenuBackground, cursor, qMark, leftArrow;
+    sf::Sprite backgroundObj, mainMenuBackgroundObj, cursorObj, qMarkObj, leftArrowObj;
     sf::Font font;
     sf::Text text;
 
@@ -81,29 +81,75 @@ int main()
         return 1;
     }
 
+    if (!cursor.loadFromFile("cursor.png"))
+    {
+        cout << "Failed to load cursor.png";
+        return 1;
+    }
+
+    if (!qMark.loadFromFile("?.jpg"))
+    {
+        cout << "Failed to load ?.jpg";
+        return 1;
+    }
+
+    if (!leftArrow.loadFromFile("left_arrow.png"))
+    {
+        cout << "Failed to load left_arrow.png";
+        return 1;
+    }
+
     text.setFont(font);
 
     backgroundObj.setTexture(background);
     backgroundObj.setScale(1280 / backgroundObj.getLocalBounds().width, 720 / backgroundObj.getLocalBounds().height);
     mainMenuBackgroundObj.setTexture(mainMenuBackground);
     mainMenuBackgroundObj.setScale(1280 / mainMenuBackgroundObj.getLocalBounds().width, 720 / mainMenuBackgroundObj.getLocalBounds().height);
+    cursorObj.setTexture(cursor);
+    cursorObj.scale(0.05, 0.05);
+    leftArrowObj.setTexture(leftArrow);
+    leftArrowObj.scale(0.1, 0.1);
 
     Button startButton(1280 / 2 - 150, 300, 300, 50, "Start", font, sf::Color::Black, sf::Color::White);
+    Button rulesButton(1280 / 2 - 150, 370, 300, 50, "Rules", font, sf::Color::Black, sf::Color::White);
+    Button ArrowButton(0, 0, 85, 35, "", font, sf::Color::Black, sf::Color::White);
+
+    int test = 0;
+    int poz_cursor_x = 640;
+    int poz_cursor_y = 360;
+
+    window.setMouseCursorVisible(false); //hide mouse cursor
+
     while (window.isOpen())
     {
         sf::Event event;
+
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
+            {
                 window.close();
+            }
+
             if (event.type == sf::Event::MouseButtonPressed)
             {
-                if (startButton.isOver(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))
-                {
-                    startButton.setString("sal");
-                    
-                }
+                if (test == 0)
+                    if (startButton.isOver(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))
+                    {
+                        test = 1;
+                    }
+                if (test == 0)
+                    if (rulesButton.isOver(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))
+                    {
+                        test = 2;
+                    }
+                if (test > 0)
+                    if (ArrowButton.isOver(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))
+                    {
+                        test = 0;
+                    }
             }
+
             if (event.type == sf::Event::MouseMoved)
             {
                 if (startButton.isOver(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))
@@ -114,24 +160,83 @@ int main()
                 {
                     startButton.setBackgroundColor(sf::Color::Black);
                 }
+
+                if (rulesButton.isOver(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))
+                {
+                    rulesButton.setBackgroundColor(sf::Color::Blue);
+                }
+                else
+                {
+                    rulesButton.setBackgroundColor(sf::Color::Black);
+                }
+
+                if (ArrowButton.isOver(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))
+                {
+                    ArrowButton.setBackgroundColor(sf::Color::Blue);
+                }
+                else
+                {
+                    ArrowButton.setBackgroundColor(sf::Color::Black);
+                }
+
+                poz_cursor_x = sf::Mouse::getPosition(window).x;
+                poz_cursor_y = sf::Mouse::getPosition(window).y;
             }
         }
-        window.clear();
-        window.draw(mainMenuBackgroundObj);
 
-        text.setString("Learning about a bioprocess");
-        text.setCharacterSize(32);
-        text.setFillColor(sf::Color::Blue);
-        text.setStyle(sf::Text::Bold);
-        text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 150);
-        window.draw(text);
-        text.setString("The Escape Room Version");
-        text.setCharacterSize(18);
-        text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 182);
-        window.draw(text);
+        switch (test)
+        {
+        case 1: //first level
 
-        window.draw(startButton);
+            window.clear();
+            window.draw(backgroundObj);
+            window.draw(ArrowButton);
 
+            leftArrowObj.setPosition(0, 0);
+            window.draw(leftArrowObj);
+            break;
+        case 2: //rules menu
+            window.clear();
+            window.draw(mainMenuBackgroundObj);
+            window.draw(ArrowButton);
+            leftArrowObj.setPosition(0, 0);
+            window.draw(leftArrowObj);
+
+            text.setString("Reguli:");
+            text.setCharacterSize(40);
+            text.setStyle(sf::Text::Bold);
+            text.setFillColor(sf::Color::Blue);
+            text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 150);
+            window.draw(text);
+            text.setString("Apasa <= pentru a reveni la imaginea anterioara\nregula2\nregula3\nregula4");
+            text.setCharacterSize(22);
+            text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 200);
+            window.draw(text);
+            break;
+        default: //main menu
+
+            window.clear();
+            window.draw(mainMenuBackgroundObj);
+
+            text.setString("Learning about a bioprocess");
+            text.setCharacterSize(32);
+            text.setFillColor(sf::Color::Blue);
+            text.setStyle(sf::Text::Bold);
+            text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 150);
+            window.draw(text);
+            text.setString("The Escape Room Version");
+            text.setCharacterSize(18);
+            text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 182);
+            window.draw(text);
+
+            window.draw(startButton);
+            window.draw(rulesButton);
+        }
+        //draw cursor
+        cursorObj.setPosition(poz_cursor_x, poz_cursor_y);
+        cursorObj.setPosition(poz_cursor_x, poz_cursor_y);
+        window.draw(cursorObj);
+        //update display
         window.display();
     }
 
