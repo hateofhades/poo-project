@@ -197,6 +197,7 @@ int main()
     Button rulesButton(1280 / 2 - 150, 370, 300, 50, "Rules", font, sf::Color::Black, sf::Color::White);
     Button creditsButton(1280 / 2 - 150, 440, 300, 50, "Credits", font, sf::Color::Black, sf::Color::White);
     Button ArrowButton(0, 0, 85, 35, "", font, sf::Color::Transparent, sf::Color::Transparent);
+    Button RetryButton(1280 / 2 - 150, 370, 300, 50, "Retry", font, sf::Color::Black, sf::Color::White);
 
     Button *buttons[100];
     int numButons = 0;
@@ -205,10 +206,12 @@ int main()
     buttons[numButons++] = &rulesButton;
     buttons[numButons++] = &creditsButton;
     buttons[numButons++] = &ArrowButton;
+    buttons[numButons++] = &RetryButton;
 
     int test = 0;
     int poz_cursor_x = 640;
     int poz_cursor_y = 360;
+    int input_is_wrong = 2;
 
     window.setMouseCursorVisible(false); //hide mouse cursor
 
@@ -231,8 +234,9 @@ int main()
                 poz_cursor_x = sf::Mouse::getPosition(window).x;
                 poz_cursor_y = sf::Mouse::getPosition(window).y;
 
-                if (test == 0)
+                switch (test)
                 {
+                case 0:
                     if (startButton.isOver(poz_cursor_x, poz_cursor_y))
                     {
                         test = 1;
@@ -245,12 +249,23 @@ int main()
                     {
                         test = 3;
                     }
-                }
-                if (test > 0)
+                    break;
+                case 1 ... 10:
                     if (ArrowButton.isOver(poz_cursor_x, poz_cursor_y))
                     {
                         test = 0;
                     }
+                    break;
+                case -2 ... - 1:
+                    if (RetryButton.isOver(poz_cursor_x, poz_cursor_y))
+                    {
+                        //go back to main menu and undo all changes
+                        test = 0;
+
+                        questionPopup.setInputAnswer("");
+                    }
+                    break;
+                }
             }
 
             if (event.type == sf::Event::MouseMoved)
@@ -268,7 +283,9 @@ int main()
                     {
                         (*buttons[i]).setBackgroundColor(sf::Color::Black);
                         if (buttons[i] == &ArrowButton)
+                        {
                             (*buttons[i]).setBackgroundColor(sf::Color::Transparent);
+                        }
                     }
                 }
             }
@@ -281,7 +298,7 @@ int main()
                 }
                 if (event.key.code == sf::Keyboard::Enter)
                 {
-                    if (test = 1)
+                    if (test == 1)
                     {
                         if (questionPopup.getInputAnswer() == questionPopup.getCorrectAnswer())
                         {
@@ -291,9 +308,16 @@ int main()
                         else
                         {
                             questionPopup.setInputAnswer("Your answer is wrong!");
+                            input_is_wrong = 1;
                         }
                     }
                 }
+            }
+            //delete all text at once if input answer is wrong
+            if (event.key.code != sf::Keyboard::Enter && event.type == sf::Event::KeyPressed && input_is_wrong == 1 && test == 1)
+            {
+                questionPopup.setInputAnswer("");
+                input_is_wrong = 0;
             }
 
             if (event.type == sf::Event::TextEntered)
@@ -306,11 +330,24 @@ int main()
                     }
                 }
             }
+            //FOR TESTING THE FINAL MENU(WIN = UP ARROW/GAME OVER = DOWN ARROW)
+            if (event.type == sf::Event::KeyPressed) //test
+            {
+                if (event.key.code == sf::Keyboard::Up)
+                {
+                    test = -1;
+                }
+                if (event.key.code == sf::Keyboard::Down)
+                {
+                    test = -2;
+                }
+            }
+            //////////////////////////////////////////////////////////////
         }
+
         window.clear();
         switch (test)
         {
-
         case 1: //startup password
 
             window.draw(backgroundObj);
@@ -320,6 +357,9 @@ int main()
             window.draw(leftArrowObj);
 
             window.draw(questionPopup);
+
+            window.draw(text);
+
             break;
         case 2: //rules menu
             window.draw(mainMenuBackgroundObj);
@@ -355,6 +395,40 @@ int main()
             text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 300);
             window.draw(text);
             break;
+        case -1: //won the game
+            window.draw(mainMenuBackgroundObj);
+
+            text.setString("Congratulations!");
+            text.setCharacterSize(60);
+            text.setFillColor(sf::Color::Blue);
+            text.setStyle(sf::Text::Bold);
+            text.setStyle(sf::Text::Italic);
+            text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 250);
+            window.draw(text);
+            text.setString("You won the game!");
+            text.setCharacterSize(27);
+            text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 317);
+            window.draw(text);
+
+            window.draw(RetryButton);
+            break;
+        case -2: //lost the game
+            window.draw(mainMenuBackgroundObj);
+
+            text.setString("Game over!");
+            text.setCharacterSize(60);
+            text.setFillColor(sf::Color::Blue);
+            text.setStyle(sf::Text::Bold);
+            text.setStyle(sf::Text::Italic);
+            text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 250);
+            window.draw(text);
+            text.setString("You ran out of time!");
+            text.setCharacterSize(27);
+            text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 315);
+            window.draw(text);
+            window.draw(RetryButton);
+            break;
+
         default: //main menu
 
             window.draw(mainMenuBackgroundObj);
