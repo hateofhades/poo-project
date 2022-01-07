@@ -75,7 +75,7 @@ public:
         this->font = font;
         this->correctAnswer = correctAnswer;
 
-        this->background.setSize(sf::Vector2f(500, 400));
+        this->background.setSize(sf::Vector2f(500, 200));
         this->background.setPosition(1280 / 2 - this->background.getSize().x / 2, 720 / 2 - this->background.getSize().y / 2);
         this->background.setFillColor(sf::Color::Blue);
         this->question.setString(question);
@@ -102,6 +102,41 @@ public:
         this->pressEnter.setFont(this->font);
         this->pressEnter.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->pressEnter.getLocalBounds().width) / 2, this->background.getPosition().y + this->background.getSize().y - this->pressEnter.getLocalBounds().height - 10);
     }
+
+    QuestionPopup(string question, string correctAnswer, sf::Font font, int i) //constructor for question 1
+    {
+        this->hasPhoto = 0;
+        this->font = font;
+        this->correctAnswer = correctAnswer;
+
+        this->background.setSize(sf::Vector2f(550, 470));
+        this->background.setPosition(1280 / 2 - this->background.getSize().x / 2, 720 / 2 - this->background.getSize().y / 2);
+        this->background.setFillColor(sf::Color::Blue);
+        this->question.setString(question);
+        this->question.setCharacterSize(24);
+        this->question.setFillColor(sf::Color::White);
+        this->question.setStyle(sf::Text::Bold);
+        this->question.setFont(this->font);
+        this->question.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->question.getLocalBounds().width) / 2, this->background.getPosition().y);
+        this->input.setSize(sf::Vector2f(this->background.getSize().x - 20, 30));
+        this->input.setPosition(this->background.getPosition().x + 10, this->question.getPosition().y + this->question.getLocalBounds().height + 30);
+        this->input.setFillColor(sf::Color::White);
+
+        this->inputAnswer.setString("");
+        this->inputAnswer.setCharacterSize(18);
+        this->inputAnswer.setFillColor(sf::Color::Black);
+        this->inputAnswer.setStyle(sf::Text::Bold);
+        this->inputAnswer.setFont(this->font);
+        this->inputAnswer.setPosition(this->input.getPosition().x + (this->input.getSize().x - this->inputAnswer.getLocalBounds().width) / 2, this->input.getPosition().y + (this->input.getSize().y - this->inputAnswer.getLocalBounds().height) / 2);
+
+        this->pressEnter.setString("Press Enter to submit your answer.");
+        this->pressEnter.setCharacterSize(18);
+        this->pressEnter.setFillColor(sf::Color::White);
+        this->pressEnter.setStyle(sf::Text::Bold);
+        this->pressEnter.setFont(this->font);
+        this->pressEnter.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->pressEnter.getLocalBounds().width) / 2, this->background.getPosition().y + this->background.getSize().y - this->pressEnter.getLocalBounds().height - 10);
+    }
+
     void setInputAnswer(string inputAnswer)
     {
         this->inputAnswer.setString(inputAnswer);
@@ -215,8 +250,10 @@ int main()
 
     window.setMouseCursorVisible(false); //hide mouse cursor
 
-    QuestionPopup questionPopup("What is 'enzymatic hydrolysis' ?", "Nu stiu", font);
-    questionPopup.addPhoto("question.png");
+    QuestionPopup questionPopup("Startup Password\nWhat is 'enzymatic hydrolysis'?", "Nu stiu", font);
+
+    QuestionPopup questionPopup_1("Question 1\nFind the answer below.\nWhich is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", "glucose", font, 1);
+    questionPopup_1.addPhoto("question.png");
 
     while (window.isOpen())
     {
@@ -292,10 +329,18 @@ int main()
 
             if (event.type == sf::Event::KeyPressed)
             {
+                //password
                 if (event.key.code == sf::Keyboard::Backspace && test == 1)
                 {
                     questionPopup.setInputAnswer(questionPopup.getInputAnswer().substr(0, questionPopup.getInputAnswer().size() - 1));
                 }
+
+                //question 1
+                if (event.key.code == sf::Keyboard::Backspace && test == 4)
+                {
+                    questionPopup_1.setInputAnswer(questionPopup_1.getInputAnswer().substr(0, questionPopup_1.getInputAnswer().size() - 1));
+                }
+
                 if (event.key.code == sf::Keyboard::Enter)
                 {
                     if (test == 1)
@@ -303,11 +348,25 @@ int main()
                         if (questionPopup.getInputAnswer() == questionPopup.getCorrectAnswer())
                         {
                             questionPopup.setInputAnswer("");
-                            test = 0;
+                            test = 4;
                         }
                         else
                         {
                             questionPopup.setInputAnswer("Your answer is wrong!");
+                            input_is_wrong = 1;
+                        }
+                    }
+
+                    if (test == 4)
+                    {
+                        if (questionPopup_1.getInputAnswer() == questionPopup_1.getCorrectAnswer())
+                        {
+                            questionPopup_1.setInputAnswer("");
+                            test = 5;
+                        }
+                        else
+                        {
+                            questionPopup_1.setInputAnswer("Your answer is wrong!");
                             input_is_wrong = 1;
                         }
                     }
@@ -320,6 +379,12 @@ int main()
                 input_is_wrong = 0;
             }
 
+            if (event.key.code != sf::Keyboard::Enter && event.type == sf::Event::KeyPressed && input_is_wrong == 1 && test == 4)
+            {
+                questionPopup_1.setInputAnswer("");
+                input_is_wrong = 0;
+            }
+
             if (event.type == sf::Event::TextEntered)
             {
                 if (test == 1)
@@ -327,6 +392,14 @@ int main()
                     if (event.text.unicode >= 32 && event.text.unicode <= 126)
                     {
                         questionPopup.setInputAnswer(questionPopup.getInputAnswer() + static_cast<char>(event.text.unicode));
+                    }
+                }
+
+                if (test == 4)
+                {
+                    if (event.text.unicode >= 32 && event.text.unicode <= 126)
+                    {
+                        questionPopup_1.setInputAnswer(questionPopup_1.getInputAnswer() + static_cast<char>(event.text.unicode));
                     }
                 }
             }
@@ -350,6 +423,7 @@ int main()
         {
         case 1: //startup password
 
+            
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
@@ -378,7 +452,7 @@ int main()
             text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 200);
             window.draw(text);
             break;
-        case 3:
+        case 3: //credits
             window.draw(mainMenuBackgroundObj);
             window.draw(ArrowButton);
             leftArrowObj.setPosition(0, 0);
@@ -395,6 +469,20 @@ int main()
             text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 300);
             window.draw(text);
             break;
+        case 4: //question 1
+            window.draw(backgroundObj);
+
+            window.draw(questionPopup_1);
+
+            window.draw(text);
+
+            break;
+
+        case 5: //question 2
+            window.draw(backgroundObj);
+
+            break;
+
         case -1: //won the game
             window.draw(mainMenuBackgroundObj);
 
@@ -447,6 +535,8 @@ int main()
             window.draw(startButton);
             window.draw(rulesButton);
             window.draw(creditsButton);
+
+            text.setString("");
         }
         //draw cursor
         cursorObj.setPosition(poz_cursor_x, poz_cursor_y);
