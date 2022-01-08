@@ -6,7 +6,7 @@ using namespace std;
 
 class QuestionPopup : public sf::Drawable
 {
-private:
+protected:
     int hasPhoto;
     sf::Texture photo;
     sf::Sprite photoSprite;

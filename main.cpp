@@ -4,6 +4,7 @@
 
 #include "Classes/QuestionPopup.h"
 #include "Classes/Button.h"
+#include "Classes/Maze.h"
 
 using namespace std;
 
@@ -86,6 +87,7 @@ int main()
 
     QuestionPopup questionPopup_1("Question 1\nFind the answer below.\nWhich is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", "glucose", font);
     questionPopup_1.addPhoto("./Sources/Images/question.png");
+    Maze mazePopup("Question 1\nFind the answer below.\nWhich is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", "glucose", font);
 
     while (window.isOpen())
     {
@@ -132,6 +134,7 @@ int main()
                         test = 0;
 
                         questionPopup_1.setInputAnswer("");
+                        mazePopup.setInputAnswer("");
                     }
                     break;
                 }
@@ -166,6 +169,29 @@ int main()
                 {
                     questionPopup_1.setInputAnswer(questionPopup_1.getInputAnswer().substr(0, questionPopup_1.getInputAnswer().size() - 1));
                 }
+                // question 2
+                else if (event.key.code == sf::Keyboard::Backspace && test == 5)
+                {
+                    mazePopup.setInputAnswer(mazePopup.getInputAnswer().substr(0, mazePopup.getInputAnswer().size() - 1));
+                }
+
+                // For mazes!
+                if (event.key.code == sf::Keyboard::Up && test == 5)
+                {
+                    mazePopup.moveUp();
+                }
+                else if (event.key.code == sf::Keyboard::Down && test == 5)
+                {
+                    mazePopup.moveDown();
+                }
+                else if (event.key.code == sf::Keyboard::Left && test == 5)
+                {
+                    mazePopup.moveLeft();
+                }
+                else if (event.key.code == sf::Keyboard::Right && test == 5)
+                {
+                    mazePopup.moveRight();
+                }
 
                 if (event.key.code == sf::Keyboard::Enter)
                 {
@@ -182,12 +208,30 @@ int main()
                             input_is_wrong = 1;
                         }
                     }
+                    else if (test == 5)
+                    {
+                        if (mazePopup.getInputAnswer() == mazePopup.getCorrectAnswer())
+                        {
+                            mazePopup.setInputAnswer("");
+                            test = 6;
+                        }
+                        else
+                        {
+                            mazePopup.setInputAnswer("Your answer is wrong!");
+                            input_is_wrong = 1;
+                        }
+                    }
                 }
             }
             // delete all text at once if input answer is wrong
             if (event.key.code != sf::Keyboard::Enter && event.type == sf::Event::KeyPressed && input_is_wrong == 1 && test == 4)
             {
                 questionPopup_1.setInputAnswer("");
+                input_is_wrong = 0;
+            }
+            else if (event.key.code != sf::Keyboard::Enter && event.type == sf::Event::KeyPressed && input_is_wrong == 1 && test == 5)
+            {
+                mazePopup.setInputAnswer("");
                 input_is_wrong = 0;
             }
 
@@ -200,20 +244,14 @@ int main()
                         questionPopup_1.setInputAnswer(questionPopup_1.getInputAnswer() + static_cast<char>(event.text.unicode));
                     }
                 }
-            }
-            // FOR TESTING THE FINAL MENU(WIN = UP ARROW/GAME OVER = DOWN ARROW)
-            if (event.type == sf::Event::KeyPressed) // test
-            {
-                if (event.key.code == sf::Keyboard::Up)
+                else if (test == 5)
                 {
-                    test = -1;
-                }
-                if (event.key.code == sf::Keyboard::Down)
-                {
-                    test = -2;
+                    if (event.text.unicode >= 32 && event.text.unicode <= 126)
+                    {
+                        mazePopup.setInputAnswer(mazePopup.getInputAnswer() + static_cast<char>(event.text.unicode));
+                    }
                 }
             }
-            //////////////////////////////////////////////////////////////
         }
 
         window.clear();
@@ -268,6 +306,26 @@ int main()
 
         case 5: // question 2
             window.draw(backgroundObj);
+            window.draw(ArrowButton);
+
+            leftArrowObj.setPosition(0, 0);
+            window.draw(leftArrowObj);
+
+            window.draw(mazePopup);
+
+            window.draw(text);
+
+            break;
+        case 6:
+            window.draw(backgroundObj);
+            window.draw(ArrowButton);
+
+            leftArrowObj.setPosition(0, 0);
+            window.draw(leftArrowObj);
+
+            // window.draw(mazePopup);
+
+            window.draw(text);
 
             break;
 
