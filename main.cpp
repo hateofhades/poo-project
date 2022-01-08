@@ -5,6 +5,7 @@
 #include "Classes/QuestionPopup.h"
 #include "Classes/Button.h"
 #include "Classes/Maze.h"
+#include "Classes/QuestionMultipleAnswers.h"
 
 using namespace std;
 
@@ -88,6 +89,8 @@ int main()
     QuestionPopup questionPopup_1("Question 1\nFind the answer below.\nWhich is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", "glucose", font);
     questionPopup_1.addPhoto("./Sources/Images/question.png");
     Maze mazePopup("Question 1\nFind the answer below.\nWhich is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", "glucose", font);
+
+    QuestionMultipleAnswers multipleAnswer("Which is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", 1, font, "Glucose", "Neither", "Ur moma");
 
     while (window.isOpen())
     {
@@ -221,6 +224,18 @@ int main()
                             input_is_wrong = 1;
                         }
                     }
+                    else if (test == 6)
+                    {
+                        if (multipleAnswer.getSelected() == multipleAnswer.getCorrectAnswer())
+                        {
+                            test = 7;
+                        }
+                        else
+                        {
+                            multipleAnswer.setHint("Your answer is wrong!");
+                            input_is_wrong = 1;
+                        }
+                    }
                 }
             }
             // delete all text at once if input answer is wrong
@@ -233,6 +248,14 @@ int main()
             {
                 mazePopup.setInputAnswer("");
                 input_is_wrong = 0;
+            }
+            else if (test == 6 && (event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::Num3 || event.key.code == sf::Keyboard::Numpad1 || event.key.code == sf::Keyboard::Numpad2 || event.key.code == sf::Keyboard::Numpad3))
+            {
+                int selected = (event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::Numpad1) ? 1 : (event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::Numpad2) ? 2
+                                                                                                                                                                                                         : 3;
+                multipleAnswer.selectAnswer(selected);
+                input_is_wrong = 0;
+                multipleAnswer.setHint("Press Enter to submit your answer and 1, 2 or 3 to select an answer.");
             }
 
             if (event.type == sf::Event::TextEntered)
@@ -323,10 +346,18 @@ int main()
             leftArrowObj.setPosition(0, 0);
             window.draw(leftArrowObj);
 
-            // window.draw(mazePopup);
+            window.draw(multipleAnswer);
 
             window.draw(text);
 
+            break;
+        case 7:
+            window.draw(backgroundObj);
+            window.draw(ArrowButton);
+
+            leftArrowObj.setPosition(0, 0);
+            window.draw(leftArrowObj);
+            window.draw(text);
             break;
 
         case -1: // won the game
