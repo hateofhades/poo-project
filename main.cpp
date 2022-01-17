@@ -16,7 +16,7 @@ int main()
     sf::Sprite backgroundObj, mainMenuBackgroundObj, cursorObj, qMarkObj, leftArrowObj;
     sf::Font font;
     sf::Text text;
-    sf::Clock clock; // starts the clock
+    sf::Clock clock1; // starts the global clock
 
     if (!background.loadFromFile("./Sources/Images/background.png"))
     {
@@ -96,6 +96,12 @@ int main()
     while (window.isOpen())
     {
         sf::Event event;
+        sf::Time elapsed1 = clock1.getElapsedTime();
+        sf::Time elapsed2 = clock1.getElapsedTime(); // doar demonstrativ; linia asta trebuie modificata cu clock2 si bagata dupa acesta
+
+        /* sf::Clock clock2; // starts the local clock 
+        clock2.restart(); */
+        // codul comentat trebuie inserat unde incepe/se lanseaza intrebarea prima data
 
         while (window.pollEvent(event))
         {
@@ -277,7 +283,6 @@ int main()
                 }
             }
         }
-        sf::Time elapsed1 = clock.getElapsedTime();
 
         window.clear();
         switch (test)
@@ -332,6 +337,11 @@ int main()
             text.setPosition(1111, 22);
             window.draw(text);
 
+            text.setString(std::to_string(elapsed2.asSeconds()));
+            text.setCharacterSize(30);
+            text.setPosition(1111, 44);
+            window.draw(text);
+
             break;
 
         case 5: // question 2
@@ -350,6 +360,11 @@ int main()
             text.setPosition(1111, 22);
             window.draw(text);
 
+            text.setString(std::to_string(elapsed2.asSeconds()));
+            text.setCharacterSize(30);
+            text.setPosition(1111, 44);
+            window.draw(text);
+
             break;
         case 6:
             window.draw(backgroundObj);
@@ -364,6 +379,11 @@ int main()
             text.setString(std::to_string(elapsed1.asSeconds()));
             text.setCharacterSize(30);
             text.setPosition(1111, 22);
+            window.draw(text);
+
+            text.setString(std::to_string(elapsed2.asSeconds()));
+            text.setCharacterSize(30);
+            text.setPosition(1111, 44);
             window.draw(text);
 
             break;
