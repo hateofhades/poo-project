@@ -69,7 +69,7 @@ int main()
     Button rulesButton(1280 / 2 - 150, 370, 300, 50, "Rules", font, sf::Color::Black, sf::Color::White);
     Button creditsButton(1280 / 2 - 150, 440, 300, 50, "Credits", font, sf::Color::Black, sf::Color::White);
     Button ArrowButton(0, 0, 85, 35, "", font, sf::Color::Transparent, sf::Color::Transparent);
-    Button RetryButton(1280 / 2 - 150, 370, 300, 50, "Retry", font, sf::Color::Black, sf::Color::White);
+    Button ExitButton(1280 / 2 - 150, 370, 300, 50, "Exit", font, sf::Color::Black, sf::Color::White);
 
     Button *buttons[100];
     int numButons = 0;
@@ -78,7 +78,7 @@ int main()
     buttons[numButons++] = &rulesButton;
     buttons[numButons++] = &creditsButton;
     buttons[numButons++] = &ArrowButton;
-    buttons[numButons++] = &RetryButton;
+    buttons[numButons++] = &ExitButton;
 
     int test = 0;
     int poz_cursor_x = 640;
@@ -138,13 +138,9 @@ int main()
                     }
                     break;
                 case -2 ... - 1:
-                    if (RetryButton.isOver(poz_cursor_x, poz_cursor_y))
+                    if (ExitButton.isOver(poz_cursor_x, poz_cursor_y))
                     {
-                        // go back to main menu and undo all changes
-                        test = 0;
-
-                        questionPopup_1.setInputAnswer("");
-                        mazePopup.setInputAnswer("");
+                        window.close();
                     }
                     break;
                 }
@@ -411,7 +407,7 @@ int main()
             text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 317);
             window.draw(text);
 
-            window.draw(RetryButton);
+            window.draw(ExitButton);
             break;
         case -2: // lost the game
             window.draw(mainMenuBackgroundObj);
@@ -427,7 +423,7 @@ int main()
             text.setCharacterSize(27);
             text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 315);
             window.draw(text);
-            window.draw(RetryButton);
+            window.draw(ExitButton);
             break;
 
         default: // main menu
