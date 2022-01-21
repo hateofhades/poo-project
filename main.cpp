@@ -95,13 +95,8 @@ int main()
 
     while (window.isOpen())
     {
-        sf::Event event;
         sf::Time elapsed1 = clock1.getElapsedTime();
-        sf::Time elapsed2 = clock1.getElapsedTime(); // doar demonstrativ; linia asta trebuie modificata cu clock2 si bagata dupa acesta
-
-        /* sf::Clock clock2; // starts the local clock 
-        clock2.restart(); */
-        // codul comentat trebuie inserat unde incepe/se lanseaza intrebarea prima data
+        sf::Event event;
 
         while (window.pollEvent(event))
         {
@@ -121,6 +116,8 @@ int main()
                     if (startButton.isOver(poz_cursor_x, poz_cursor_y))
                     {
                         test = 4;
+                        clock1.restart();
+                        elapsed1 = clock1.getElapsedTime();
                     }
                     if (rulesButton.isOver(poz_cursor_x, poz_cursor_y))
                     {
@@ -332,14 +329,10 @@ int main()
 
             window.draw(text);
 
+            text.setFillColor(sf::Color::Magenta);
             text.setString(std::to_string(elapsed1.asSeconds()));
             text.setCharacterSize(30);
             text.setPosition(1111, 22);
-            window.draw(text);
-
-            text.setString(std::to_string(elapsed2.asSeconds()));
-            text.setCharacterSize(30);
-            text.setPosition(1111, 44);
             window.draw(text);
 
             break;
@@ -355,16 +348,11 @@ int main()
 
             window.draw(text);
 
+            text.setFillColor(sf::Color::Magenta);
             text.setString(std::to_string(elapsed1.asSeconds()));
             text.setCharacterSize(30);
             text.setPosition(1111, 22);
             window.draw(text);
-
-            text.setString(std::to_string(elapsed2.asSeconds()));
-            text.setCharacterSize(30);
-            text.setPosition(1111, 44);
-            window.draw(text);
-
             break;
         case 6:
             window.draw(backgroundObj);
@@ -376,14 +364,11 @@ int main()
             window.draw(multipleAnswer);
 
             window.draw(text);
+
+            text.setFillColor(sf::Color::Magenta);
             text.setString(std::to_string(elapsed1.asSeconds()));
             text.setCharacterSize(30);
             text.setPosition(1111, 22);
-            window.draw(text);
-
-            text.setString(std::to_string(elapsed2.asSeconds()));
-            text.setCharacterSize(30);
-            text.setPosition(1111, 44);
             window.draw(text);
 
             break;
