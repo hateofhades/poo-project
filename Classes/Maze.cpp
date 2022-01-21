@@ -45,6 +45,7 @@ void Maze::movePlayer(int playerX, int playerY)
 
     if (this->maze[playerY][playerX] == 2)
     {
+        this->maze[playerY][playerX] = 0;
         this->hints++;
 
         srand(time(NULL));
