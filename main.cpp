@@ -12,8 +12,8 @@ using namespace std;
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Escape Room Proiect");
-    sf::Texture background, mainMenuBackground, cursor, qMark, leftArrow;
-    sf::Sprite backgroundObj, mainMenuBackgroundObj, cursorObj, qMarkObj, leftArrowObj;
+    sf::Texture background, mainMenuBackground, cursor, qMark, leftArrow, logo;
+    sf::Sprite backgroundObj, mainMenuBackgroundObj, cursorObj, qMarkObj, leftArrowObj, logoObj;
     sf::Font font;
     sf::Text text;
     sf::Clock clock1; // starts the global clock
@@ -42,6 +42,12 @@ int main()
         return 1;
     }
 
+    if (!logo.loadFromFile("./Sources/Images/erasmus_logo.png"))
+    {
+        cout << "Failed to load erasmus_logo.png";
+        return 1;
+    }
+
     if (!qMark.loadFromFile("./Sources/Images/?.jpg"))
     {
         cout << "Failed to load ?.jpg";
@@ -64,6 +70,8 @@ int main()
     cursorObj.scale(0.05, 0.05);
     leftArrowObj.setTexture(leftArrow);
     leftArrowObj.scale(0.1, 0.1);
+    logoObj.setTexture(logo);
+    logoObj.setScale(0.2, 0.2);
 
     Button startButton(1280 / 2 - 150, 300, 300, 50, "Start", font, sf::Color::Black, sf::Color::White);
     Button rulesButton(1280 / 2 - 150, 370, 300, 50, "Rules", font, sf::Color::Black, sf::Color::White);
@@ -312,10 +320,14 @@ int main()
             text.setFillColor(sf::Color::Blue);
             text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 150);
             window.draw(text);
-            text.setString("Grigore Iulia-Andreea, 323AC\nBonciu Alin, 323AC\nCodescu Elisabeta Maria, 322AC\nPurcaru Iulia-Mihaela, 323AC\nSerban Andrei, 323AC\nVirlan Adrian, 323AC");
+            text.setString("This application was developed by the following students from\nUniversity POLITEHNICA Bucharest \nAutomatic Control & Computer Science Faculty \nwithin the Erasmus+ Project 2020-1-CZ01-KA226-HE-094408\n\nGrigore Iulia-Andreea, 323AC\nBonciu Alin, 323AC\nCodescu Elisabeta Maria, 322AC\nPurcaru Iulia-Mihaela, 323AC\nSerban Andrei, 323AC\nVirlan Adrian, 323AC\n\nTeachers: M. Caramihai & Daniel Chis");
             text.setCharacterSize(22);
-            text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 300);
+            text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 230);
             window.draw(text);
+
+            logoObj.setPosition(1000, 600);
+            window.draw(logoObj);
+
             break;
         case 4: // question 1
             window.draw(backgroundObj);
