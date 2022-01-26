@@ -6,14 +6,15 @@
 #include "Classes/Button.h"
 #include "Classes/Maze.h"
 #include "Classes/QuestionMultipleAnswers.h"
+#include "Classes/QuestionCards.h"
 
 using namespace std;
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Escape Room Proiect");
-    sf::Texture background, mainMenuBackground, cursor, qMark, leftArrow, logo;
-    sf::Sprite backgroundObj, mainMenuBackgroundObj, cursorObj, qMarkObj, leftArrowObj, logoObj;
+    sf::Texture background, mainMenuBackground, cursor, qMark, leftArrow, logo, cardsImage;
+    sf::Sprite backgroundObj, mainMenuBackgroundObj, cursorObj, qMarkObj, leftArrowObj, logoObj, cardsObj;
     sf::Font font;
     sf::Text text;
     sf::Clock clock1; // starts the global clock
@@ -60,6 +61,12 @@ int main()
         return 1;
     }
 
+    if (!cardsImage.loadFromFile("./Sources/Images/cards.png"))
+    {
+        cout << "Failed to load cards.png";
+        return 1;
+    }
+
     text.setFont(font);
 
     backgroundObj.setTexture(background);
@@ -72,6 +79,9 @@ int main()
     leftArrowObj.scale(0.1, 0.1);
     logoObj.setTexture(logo);
     logoObj.setScale(0.2, 0.2);
+    cardsObj.setTexture(cardsImage);
+    cardsObj.setScale(0.9, 0.9);
+    cardsObj.setPosition(400, 180);
 
     Button startButton(1280 / 2 - 150, 300, 300, 50, "Start", font, sf::Color::Black, sf::Color::White);
     Button rulesButton(1280 / 2 - 150, 370, 300, 50, "Rules", font, sf::Color::Black, sf::Color::White);
@@ -100,6 +110,7 @@ int main()
     Maze mazePopup("Question 1\nFind the answer below.\nWhich is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", "glucose", font);
 
     QuestionMultipleAnswers multipleAnswer("Which is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", 1, font, "Glucose", "Neither", "Ur moma");
+    QuestionCards multipleCards("The following playing cards are given. In black we have the real \nvalues of product concentration, and in red the modeled values [* 10 g / L), \nfor 4 successive values of inhibitor concentration (0, 10, 25, 40). \nSpecify whether it is a model with inhibition or not.", 2, font, cardsObj, "Yes", "No answer can be given", "No");
 
     while (window.isOpen())
     {
@@ -244,6 +255,18 @@ int main()
                             input_is_wrong = 1;
                         }
                     }
+                    else if (test == 7)
+                    {
+                        if (multipleCards.getSelected() == multipleCards.getCorrectAnswer())
+                        {
+                            test = 8;
+                        }
+                        else
+                        {
+                            multipleCards.setHint("Your answer is wrong!");
+                            input_is_wrong = 1;
+                        }
+                    }
                 }
             }
             // delete all text at once if input answer is wrong
@@ -264,6 +287,14 @@ int main()
                 multipleAnswer.selectAnswer(selected);
                 input_is_wrong = 0;
                 multipleAnswer.setHint("Press Enter to submit your answer and 1, 2 or 3 to select an answer.");
+            }
+            else if (test == 7 && (event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::Num3 || event.key.code == sf::Keyboard::Numpad1 || event.key.code == sf::Keyboard::Numpad2 || event.key.code == sf::Keyboard::Numpad3))
+            {
+                int selected = (event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::Numpad1) ? 1 : (event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::Numpad2) ? 2
+                                                                                                                                                                                                         : 3;
+                multipleCards.selectAnswer(selected);
+                input_is_wrong = 0;
+                multipleCards.setHint("Press Enter to submit your answer and 1, 2 or 3 to select an answer.");
             }
 
             if (event.type == sf::Event::TextEntered)
@@ -362,7 +393,8 @@ int main()
             text.setPosition(1111, 22);
             window.draw(text);
             break;
-        case 6:
+
+        case 6: // question 3
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
@@ -378,9 +410,28 @@ int main()
             text.setCharacterSize(30);
             text.setPosition(1111, 22);
             window.draw(text);
+            break;
+
+        case 7: // question 4
+            window.draw(backgroundObj);
+            window.draw(ArrowButton);
+
+            leftArrowObj.setPosition(0, 0);
+            window.draw(leftArrowObj);
+
+            window.draw(multipleCards);
+            window.draw(cardsObj);
+
+            window.draw(text);
+
+            text.setFillColor(sf::Color::Magenta);
+            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setCharacterSize(30);
+            text.setPosition(1111, 22);
+            window.draw(text);
 
             break;
-        case 7:
+        case 8:
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
