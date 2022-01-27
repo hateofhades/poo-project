@@ -7,14 +7,15 @@
 #include "Classes/Maze.h"
 #include "Classes/QuestionMultipleAnswers.h"
 #include "Classes/QuestionCards.h"
+#include "Classes/QuestionWordSearch.h"
 
 using namespace std;
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Escape Room Proiect");
-    sf::Texture background, mainMenuBackground, cursor, qMark, leftArrow, logo, cardsImage;
-    sf::Sprite backgroundObj, mainMenuBackgroundObj, cursorObj, qMarkObj, leftArrowObj, logoObj, cardsObj;
+    sf::Texture background, mainMenuBackground, cursor, qMark, leftArrow, logo, cardsImage, wordSearch;
+    sf::Sprite backgroundObj, mainMenuBackgroundObj, cursorObj, qMarkObj, leftArrowObj, logoObj, cardsObj, wordSearchObj;
     sf::Font font;
     sf::Text text;
     sf::Clock clock1; // starts the global clock
@@ -67,6 +68,12 @@ int main()
         return 1;
     }
 
+    if (!wordSearch.loadFromFile("./Sources/Images/word_search.png"))
+    {
+        cout << "Failed to load word_search.png";
+        return 1;
+    }
+
     text.setFont(font);
 
     backgroundObj.setTexture(background);
@@ -82,6 +89,9 @@ int main()
     cardsObj.setTexture(cardsImage);
     cardsObj.setScale(0.9, 0.9);
     cardsObj.setPosition(400, 180);
+    wordSearchObj.setTexture(wordSearch);
+    wordSearchObj.setScale(0.7, 0.7);
+    wordSearchObj.setPosition(365, 230);
 
     Button startButton(1280 / 2 - 150, 300, 300, 50, "Start", font, sf::Color::Black, sf::Color::White);
     Button rulesButton(1280 / 2 - 150, 370, 300, 50, "Rules", font, sf::Color::Black, sf::Color::White);
@@ -111,6 +121,12 @@ int main()
 
     QuestionMultipleAnswers multipleAnswer("Which is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", 1, font, "Glucose", "Neither", "Ur moma");
     QuestionCards multipleCards("The following playing cards are given. In black we have the real \nvalues of product concentration, and in red the modeled values [* 10 g / L), \nfor 4 successive values of inhibitor concentration (0, 10, 25, 40). \nSpecify whether it is a model with inhibition or not.", 2, font, cardsObj, "Yes", "No answer can be given", "No");
+
+    QuestionWordSearch questionWordSearch_1("Fill in the blanks with the words you find below\nand obtain the password in order to continue.\n\n_________ is the most abundant organic compound in the world\nand is constantly replenished by photosynthesis.\n__________", "cellulose", font);
+    QuestionWordSearch questionWordSearch_2("\nThe enzymatic hydrolysis is a process performed\nin ____________ system, involving the action of soluble\nenzyme (cellulase) on insoluble substrate. \n\n________o_", "heterogenous", font);
+    QuestionWordSearch questionWordSearch_3("\nIn general, cellulases secreted by fungi \nconsistof three major classes of components: \nendoglucanases, _______________ and beta-glucosidases.  \n\n_nh___t_on", "cellobiohydrolases", font);
+    QuestionWordSearch questionWordSearch_4("\nCongratulations!\nYou have obtained the password:\n\ninhibition\n", "inhibition", font);
+
 
     while (window.isOpen())
     {
@@ -191,10 +207,29 @@ int main()
                 {
                     questionPopup_1.setInputAnswer(questionPopup_1.getInputAnswer().substr(0, questionPopup_1.getInputAnswer().size() - 1));
                 }
+
                 // question 2
                 else if (event.key.code == sf::Keyboard::Backspace && test == 5)
                 {
                     mazePopup.setInputAnswer(mazePopup.getInputAnswer().substr(0, mazePopup.getInputAnswer().size() - 1));
+                }
+
+                // question 5
+                if (event.key.code == sf::Keyboard::Backspace && test == 8)
+                {
+                    questionWordSearch_1.setInputAnswer(questionWordSearch_1.getInputAnswer().substr(0, questionWordSearch_1.getInputAnswer().size() - 1));
+                }
+                if (event.key.code == sf::Keyboard::Backspace && test == 9)
+                {
+                    questionWordSearch_2.setInputAnswer(questionWordSearch_2.getInputAnswer().substr(0, questionWordSearch_2.getInputAnswer().size() - 1));
+                }
+                if (event.key.code == sf::Keyboard::Backspace && test == 10)
+                {
+                    questionWordSearch_3.setInputAnswer(questionWordSearch_3.getInputAnswer().substr(0, questionWordSearch_3.getInputAnswer().size() - 1));
+                }
+                if (event.key.code == sf::Keyboard::Backspace && test == 11)
+                {
+                    questionWordSearch_4.setInputAnswer(questionWordSearch_4.getInputAnswer().substr(0, questionWordSearch_4.getInputAnswer().size() - 1));
                 }
 
                 // For mazes!
@@ -267,6 +302,54 @@ int main()
                             input_is_wrong = 1;
                         }
                     }
+                    else if (test == 8)
+                    {
+                        if (questionWordSearch_1.getInputAnswer() == questionWordSearch_1.getCorrectAnswer())
+                        {
+                            test = 9;
+                        }
+                        else
+                        {
+                            questionWordSearch_1.setInputAnswer("Your answer is wrong!");
+                            input_is_wrong = 1;
+                        }
+                    }
+                    else if (test == 9)
+                    {
+                        if (questionWordSearch_2.getInputAnswer() == questionWordSearch_2.getCorrectAnswer())
+                        {
+                            test = 10;
+                        }
+                        else
+                        {
+                            questionWordSearch_2.setInputAnswer("Your answer is wrong!");
+                            input_is_wrong = 1;
+                        }
+                    }
+                    else if (test == 10)
+                    {
+                        if (questionWordSearch_3.getInputAnswer() == questionWordSearch_3.getCorrectAnswer())
+                        {
+                            test = 11;
+                        }
+                        else
+                        {
+                            questionWordSearch_3.setInputAnswer("Your answer is wrong!");
+                            input_is_wrong = 1;
+                        }
+                    }
+                    else if (test == 11)
+                    {
+                        if (questionWordSearch_4.getInputAnswer() == questionWordSearch_4.getCorrectAnswer())
+                        {
+                            test = 12;
+                        }
+                        else
+                        {
+                            questionWordSearch_4.setInputAnswer("Your answer is wrong!");
+                            input_is_wrong = 1;
+                        }
+                    }
                 }
             }
             // delete all text at once if input answer is wrong
@@ -296,6 +379,26 @@ int main()
                 input_is_wrong = 0;
                 multipleCards.setHint("Press Enter to submit your answer and 1, 2 or 3 to select an answer.");
             }
+            else if (event.key.code != sf::Keyboard::Enter && event.type == sf::Event::KeyPressed && input_is_wrong == 1 && test == 8)
+            {
+                questionWordSearch_1.setInputAnswer("");
+                input_is_wrong = 0;
+            }
+            else if (event.key.code != sf::Keyboard::Enter && event.type == sf::Event::KeyPressed && input_is_wrong == 1 && test == 9)
+            {
+                questionWordSearch_2.setInputAnswer("");
+                input_is_wrong = 0;
+            }
+            else if (event.key.code != sf::Keyboard::Enter && event.type == sf::Event::KeyPressed && input_is_wrong == 1 && test == 10)
+            {
+                questionWordSearch_3.setInputAnswer("");
+                input_is_wrong = 0;
+            }
+            else if (event.key.code != sf::Keyboard::Enter && event.type == sf::Event::KeyPressed && input_is_wrong == 1 && test == 11)
+            {
+                questionWordSearch_3.setInputAnswer("");
+                input_is_wrong = 0;
+            }
 
             if (event.type == sf::Event::TextEntered)
             {
@@ -311,6 +414,34 @@ int main()
                     if (event.text.unicode >= 32 && event.text.unicode <= 126)
                     {
                         mazePopup.setInputAnswer(mazePopup.getInputAnswer() + static_cast<char>(event.text.unicode));
+                    }
+                }
+                else if (test == 8)
+                {
+                    if (event.text.unicode >= 32 && event.text.unicode <= 126)
+                    {
+                        questionWordSearch_1.setInputAnswer(questionWordSearch_1.getInputAnswer() + static_cast<char>(event.text.unicode));
+                    }
+                }
+                else if (test == 9)
+                {
+                    if (event.text.unicode >= 32 && event.text.unicode <= 126)
+                    {
+                        questionWordSearch_2.setInputAnswer(questionWordSearch_2.getInputAnswer() + static_cast<char>(event.text.unicode));
+                    }
+                }
+                else if (test == 10)
+                {
+                    if (event.text.unicode >= 32 && event.text.unicode <= 126)
+                    {
+                        questionWordSearch_3.setInputAnswer(questionWordSearch_3.getInputAnswer() + static_cast<char>(event.text.unicode));
+                    }
+                }
+                else if (test == 11)
+                {
+                    if (event.text.unicode >= 32 && event.text.unicode <= 126)
+                    {
+                        questionWordSearch_4.setInputAnswer(questionWordSearch_4.getInputAnswer() + static_cast<char>(event.text.unicode));
                     }
                 }
             }
@@ -431,13 +562,84 @@ int main()
             window.draw(text);
 
             break;
-        case 8:
+
+        case 8: // question 5
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
             leftArrowObj.setPosition(0, 0);
             window.draw(leftArrowObj);
+
+            window.draw(questionWordSearch_1);
+            window.draw(wordSearchObj);
+
             window.draw(text);
+
+            text.setFillColor(sf::Color::Magenta);
+            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setCharacterSize(30);
+            text.setPosition(1111, 22);
+            window.draw(text);
+
+            break;
+        case 9:
+            window.draw(backgroundObj);
+            window.draw(ArrowButton);
+
+            leftArrowObj.setPosition(0, 0);
+            window.draw(leftArrowObj);
+
+            window.draw(questionWordSearch_2);
+            window.draw(wordSearchObj);
+
+            window.draw(text);
+
+            text.setFillColor(sf::Color::Magenta);
+            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setCharacterSize(30);
+            text.setPosition(1111, 22);
+            window.draw(text);
+
+            break;
+
+        case 10:
+            window.draw(backgroundObj);
+            window.draw(ArrowButton);
+
+            leftArrowObj.setPosition(0, 0);
+            window.draw(leftArrowObj);
+
+            window.draw(questionWordSearch_3);
+            window.draw(wordSearchObj);
+
+            window.draw(text);
+
+            text.setFillColor(sf::Color::Magenta);
+            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setCharacterSize(30);
+            text.setPosition(1111, 22);
+            window.draw(text);
+
+            break;
+
+        case 11:
+            window.draw(backgroundObj);
+            window.draw(ArrowButton);
+
+            leftArrowObj.setPosition(0, 0);
+            window.draw(leftArrowObj);
+
+            window.draw(questionWordSearch_4);
+            window.draw(wordSearchObj);
+
+            window.draw(text);
+
+            text.setFillColor(sf::Color::Magenta);
+            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setCharacterSize(30);
+            text.setPosition(1111, 22);
+            window.draw(text);
+
             break;
 
         case -1: // won the game
