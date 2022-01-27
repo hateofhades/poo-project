@@ -19,7 +19,10 @@ Maze::Maze(string question, string correctAnswer, sf::Font font) : QuestionPopup
     this->pressEnter.setString("Answer: " + underscore);
     this->pressEnter.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->pressEnter.getLocalBounds().width) / 2, this->background.getPosition().y + this->background.getSize().y - this->pressEnter.getLocalBounds().height - 10);
 };
-
+// void ChangeColor(sf::Color)
+// {
+//     sf::Color = setFillColor(sf::Color:{});
+// }
 void Maze::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
     target.draw(this->background);
