@@ -1,62 +1,62 @@
-#include "QuestionMultipleAnswers.h"
+#include "QuestionCards2.h"
 
-QuestionMultipleAnswers::QuestionMultipleAnswers(string question, int correctAnswer, sf::Font font, string answer1, string answer2, string answer3)
+QuestionCards2::QuestionCards2(string question, int correctAnswer, sf::Font font, sf::Sprite image, string answer1, string answer2, string answer3)
 {
     this->font = font;
-
+    this->image = image;
     this->question = question;
     this->correctAnswer = correctAnswer;
     this->answer1 = answer1;
     this->answer2 = answer2;
     this->answer3 = answer3;
 
-    this->background.setSize(sf::Vector2f(550, 470));
+    this->background.setSize(sf::Vector2f(800, 600));
     this->background.setPosition(1280 / 2 - this->background.getSize().x / 2, 720 / 2 - this->background.getSize().y / 2);
     this->background.setFillColor(sf::Color::Blue);
 
     this->questionTxt.setString(this->question);
-    this->questionTxt.setCharacterSize(24);
+    this->questionTxt.setCharacterSize(20);
     this->questionTxt.setFillColor(sf::Color::White);
     this->questionTxt.setStyle(sf::Text::Bold);
     this->questionTxt.setFont(this->font);
     // Put the question txt at the top of the background box
-    this->questionTxt.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->questionTxt.getLocalBounds().width) / 2, this->background.getPosition().y + this->questionTxt.getLocalBounds().height);
+    this->questionTxt.setPosition(this->background.getPosition().x + 80, this->background.getPosition().y + 20);
 
     // Show possible answers and their checkboxes
-    this->box1.setSize(sf::Vector2f(this->background.getSize().x / 2 - 100, this->background.getSize().y / 8));
-    this->box1.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->box1.getSize().x) / 2, this->background.getPosition().y + 70 + this->questionTxt.getLocalBounds().height + this->box1.getSize().y + 10);
+    this->box1.setSize(sf::Vector2f(this->background.getSize().x / 2 - 100, this->background.getSize().y / 10));
+    this->box1.setPosition(this->background.getPosition().x + 245, this->background.getPosition().y - 100 + this->questionTxt.getLocalBounds().height + 10 + this->image.getGlobalBounds().height + this->box1.getSize().y + 10 + this->box2.getSize().y + 10 + this->box3.getSize().y);
     this->box1.setFillColor(sf::Color::White);
     this->box1.setOutlineColor(sf::Color::Black);
     this->box1.setOutlineThickness(2);
 
     this->answer1Txt.setString(this->answer1);
-    this->answer1Txt.setCharacterSize(24);
+    this->answer1Txt.setCharacterSize(20);
     this->answer1Txt.setFillColor(sf::Color::Black);
     this->answer1Txt.setStyle(sf::Text::Bold);
     this->answer1Txt.setFont(this->font);
     this->answer1Txt.setPosition(this->box1.getPosition().x + (this->box1.getSize().x - this->answer1Txt.getLocalBounds().width) / 2, this->box1.getPosition().y + (this->box1.getSize().y - this->answer1Txt.getLocalBounds().height) / 2);
 
-    this->box2.setSize(sf::Vector2f(this->background.getSize().x / 2 - 100, this->background.getSize().y / 8));
-    this->box2.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->box2.getSize().x) / 2, this->background.getPosition().y + 70 + this->questionTxt.getLocalBounds().height + 10 + this->box1.getSize().y + 10 + this->box2.getSize().y);
+    this->box2.setSize(sf::Vector2f(this->background.getSize().x / 2 - 100, this->background.getSize().y / 10));
+    this->box2.setPosition(this->background.getPosition().x + 245, this->background.getPosition().y - 90 + this->questionTxt.getLocalBounds().height + 10 + this->image.getGlobalBounds().height + this->box1.getSize().y + 10 + this->box2.getSize().y + 10 + this->box3.getSize().y);
     this->box2.setFillColor(sf::Color::White);
     this->box2.setOutlineColor(sf::Color::Black);
     this->box2.setOutlineThickness(2);
 
     this->answer2Txt.setString(this->answer2);
-    this->answer2Txt.setCharacterSize(24);
+    this->answer2Txt.setCharacterSize(20);
     this->answer2Txt.setFillColor(sf::Color::Black);
     this->answer2Txt.setStyle(sf::Text::Bold);
     this->answer2Txt.setFont(this->font);
     this->answer2Txt.setPosition(this->box2.getPosition().x + (this->box2.getSize().x - this->answer2Txt.getLocalBounds().width) / 2, this->box2.getPosition().y + (this->box2.getSize().y - this->answer2Txt.getLocalBounds().height) / 2);
 
-    this->box3.setSize(sf::Vector2f(this->background.getSize().x / 2 - 100, this->background.getSize().y / 8));
-    this->box3.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->box3.getSize().x) / 2, this->background.getPosition().y + 70 + this->questionTxt.getLocalBounds().height + 10 + this->box1.getSize().y + 10 + this->box2.getSize().y + 10 + this->box3.getSize().y);
+    this->box3.setSize(sf::Vector2f(this->background.getSize().x / 2 - 100, this->background.getSize().y / 10));
+    this->box3.setPosition(this->background.getPosition().x + 245, this->background.getPosition().y - 80 + this->questionTxt.getLocalBounds().height + 10 + this->image.getGlobalBounds().height + this->box1.getSize().y + 10 + this->box2.getSize().y + 10 + this->box3.getSize().y);
     this->box3.setFillColor(sf::Color::White);
     this->box3.setOutlineColor(sf::Color::Black);
     this->box3.setOutlineThickness(2);
 
     this->answer3Txt.setString(this->answer3);
-    this->answer3Txt.setCharacterSize(24);
+    this->answer3Txt.setCharacterSize(20);
     this->answer3Txt.setFillColor(sf::Color::Black);
     this->answer3Txt.setStyle(sf::Text::Bold);
     this->answer3Txt.setFont(this->font);
@@ -72,7 +72,7 @@ QuestionMultipleAnswers::QuestionMultipleAnswers(string question, int correctAns
     this->selectAnswer(1);
 };
 
-void QuestionMultipleAnswers::selectAnswer(int number)
+void QuestionCards2::selectAnswer(int number)
 {
     this->selectedAnswer = number;
 
@@ -88,23 +88,23 @@ void QuestionMultipleAnswers::selectAnswer(int number)
         this->box3.setFillColor(sf::Color::Red);
 };
 
-int QuestionMultipleAnswers::getSelected()
+int QuestionCards2::getSelected()
 {
     return this->selectedAnswer;
 };
 
-void QuestionMultipleAnswers::setHint(string text)
+void QuestionCards2::setHint(string text)
 {
     this->hint.setString(text);
     this->hint.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->hint.getLocalBounds().width) / 2, this->background.getPosition().y + this->background.getSize().y - this->hint.getLocalBounds().height - 10);
 };
 
-string QuestionMultipleAnswers::getQuestion()
+string QuestionCards2::getQuestion()
 {
     return this->question;
 };
 
-string QuestionMultipleAnswers::getAnswer(int number)
+string QuestionCards2::getAnswer(int number)
 {
     switch (number)
     {
@@ -119,17 +119,17 @@ string QuestionMultipleAnswers::getAnswer(int number)
     };
 };
 
-int QuestionMultipleAnswers::getCorrectAnswer()
+int QuestionCards2::getCorrectAnswer()
 {
     return this->correctAnswer;
 };
 
-void QuestionMultipleAnswers::setBackgroundSize(int width, int height)
+void QuestionCards2::setBackgroundSize(int width, int height)
 {
     this->background.setSize(sf::Vector2f(width, height));
 };
 
-void QuestionMultipleAnswers::draw(sf::RenderTarget &target, sf::RenderStates states) const
+void QuestionCards2::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
     target.draw(this->background);
     target.draw(this->box1);
