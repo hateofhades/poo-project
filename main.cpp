@@ -120,12 +120,13 @@ int main()
     Maze mazePopup("Question 1\nFind the answer below.\nWhich is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", "glucose", font);
 
     QuestionMultipleAnswers multipleAnswer("Which is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", 1, font, "Glucose", "Neither", "Ur moma");
+    QuestionMultipleAnswers multipleAnswer2("Which is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", 3, font, "Glucose", "Neither", "Ur moma");
     QuestionCards multipleCards("The following playing cards are given. In black we have the real \nvalues of product concentration, and in red the modeled values [* 10 g / L), \nfor 4 successive values of inhibitor concentration (0, 10, 25, 40). \nSpecify whether it is a model with inhibition or not.", 2, font, cardsObj, "Yes", "No answer can be given", "No");
 
-    QuestionWordSearch questionWordSearch_1("Fill in the blanks with the words you find below\nand obtain the password in order to continue.\n\n_________ is the most abundant organic compound in the world\nand is constantly replenished by photosynthesis.\n__________", "cellulose", font);
-    QuestionWordSearch questionWordSearch_2("\nThe enzymatic hydrolysis is a process performed\nin ____________ system, involving the action of soluble\nenzyme (cellulase) on insoluble substrate. \n\n________o_", "heterogenous", font);
-    QuestionWordSearch questionWordSearch_3("\nIn general, cellulases secreted by fungi \nconsistof three major classes of components: \nendoglucanases, _______________ and beta-glucosidases.  \n\n_nh___t_on", "cellobiohydrolases", font);
-    QuestionWordSearch questionWordSearch_4("\nCongratulations!\nYou have obtained the password:\n\ninhibition\n", "inhibition", font);
+    QuestionWordSearch questionWordSearch_1("Fill in the blanks with the words you find below\nand obtain the password in order to continue.\n\n_________ is the most abundant organic compound in the world\nand is constantly replenished by photosynthesis.\n__________", "1", font);
+    QuestionWordSearch questionWordSearch_2("\nThe enzymatic hydrolysis is a process performed\nin ____________ system, involving the action of soluble\nenzyme (cellulase) on insoluble substrate. \n\n________o_", "2", font);
+    QuestionWordSearch questionWordSearch_3("\nIn general, cellulases secreted by fungi \nconsistof three major classes of components: \nendoglucanases, _______________ and beta-glucosidases.  \n\n_nh___t_on", "3", font);
+    QuestionWordSearch questionWordSearch_4("\nCongratulations!\nYou have obtained the password:\n\ninhibition\n", "4", font);
 
 
     while (window.isOpen())
@@ -350,6 +351,18 @@ int main()
                             input_is_wrong = 1;
                         }
                     }
+                    else if (test == 12)
+                    {
+                        if (multipleAnswer2.getSelected() == multipleAnswer2.getCorrectAnswer())
+                        {
+                            test = 13;
+                        }
+                        else
+                        {
+                            multipleAnswer2.setHint("Your answer is wrong!");
+                            input_is_wrong = 1;
+                        }
+                    }
                 }
             }
             // delete all text at once if input answer is wrong
@@ -398,6 +411,14 @@ int main()
             {
                 questionWordSearch_3.setInputAnswer("");
                 input_is_wrong = 0;
+            }
+            else if (test == 12 && (event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::Num3 || event.key.code == sf::Keyboard::Numpad1 || event.key.code == sf::Keyboard::Numpad2 || event.key.code == sf::Keyboard::Numpad3))
+            {
+                int selected = (event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::Numpad1) ? 1 : (event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::Numpad2) ? 2
+                                                                                                                                                                                                         : 3;
+                multipleAnswer2.selectAnswer(selected);
+                input_is_wrong = 0;
+                multipleAnswer2.setHint("Press Enter to submit your answer and 1, 2 or 3 to select an answer.");
             }
 
             if (event.type == sf::Event::TextEntered)
@@ -641,8 +662,25 @@ int main()
             window.draw(text);
 
             break;
-            
         case 12:
+            window.draw(backgroundObj);
+            window.draw(ArrowButton);
+
+            leftArrowObj.setPosition(0, 0);
+            window.draw(leftArrowObj);
+
+            window.draw(multipleAnswer2);
+
+            window.draw(text);
+
+            text.setFillColor(sf::Color::Magenta);
+            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setCharacterSize(30);
+            text.setPosition(1111, 22);
+            window.draw(text);
+            break;
+
+        case 13:
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
