@@ -641,6 +641,15 @@ int main()
             window.draw(text);
 
             break;
+            
+        case 12:
+            window.draw(backgroundObj);
+            window.draw(ArrowButton);
+
+            leftArrowObj.setPosition(0, 0);
+            window.draw(leftArrowObj);
+            window.draw(text);
+            break;
 
         case -1: // won the game
             window.draw(mainMenuBackgroundObj);
