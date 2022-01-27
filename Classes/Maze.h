@@ -53,6 +53,7 @@ public:
     void moveRight();
     int getPlayerX();
     int getPlayerY();
+    void ChangeColor(sf::Color color);
 
     void movePlayer(int playerX, int playerY);
 };

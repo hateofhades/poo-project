@@ -71,7 +71,10 @@ QuestionMultipleAnswers::QuestionMultipleAnswers(string question, int correctAns
 
     this->selectAnswer(1);
 };
-
+void QuestionMultipleAnswers::ChangeColor(sf::Color color)
+{
+    this->background.setFillColor(color);
+}
 void QuestionMultipleAnswers::selectAnswer(int number)
 {
     this->selectedAnswer = number;

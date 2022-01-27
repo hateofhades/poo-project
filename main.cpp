@@ -127,9 +127,12 @@ int main()
     QuestionPopup questionPopup_1("Question 1\nFind the answer below.\nWhich is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", "glucose", font);
     questionPopup_1.addPhoto("./Sources/Images/question.png");
     Maze mazePopup("Question 1\nFind the answer below.\nWhich is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", "glucose", font);
+    mazePopup.ChangeColor(sf::Color{240, 166, 7, 200});
 
     QuestionMultipleAnswers multipleAnswer("Which is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", 1, font, "Glucose", "Neither", "Ur moma");
+    multipleAnswer.ChangeColor(sf::Color{178, 237, 40, 200});
     QuestionMultipleAnswers multipleAnswer2("The dependence of product accumulation \nvs inhibitor concentration is: ", 1, font, "Exponential", "Parabolic", "Linear");
+    multipleAnswer2.ChangeColor(sf::Color{134, 138, 127, 200});
     QuestionCards multipleCards("The following playing cards are given. In black we have the real \nvalues of product concentration, and in red the modeled values [* 10 g / L), \nfor 4 successive values of inhibitor concentration (0, 10, 25, 40). \nSpecify whether it is a model with inhibition or not.", 2, font, cardsObj, "Yes", "No answer can be given", "No");
     QuestionCards2 multipleCards2("The equation is a generalization of:", 2, font, cardsObj, "Michaelis-Meneten equation", "Monod equation", "Miller equation");
 
@@ -500,7 +503,7 @@ int main()
             }
         }
 
-        if (elapsed1.asSeconds() > 40 * 60)
+        if (elapsed1.asSeconds() > 20 * 60)
             test = -2;
 
         window.clear();
