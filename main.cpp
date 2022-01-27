@@ -557,7 +557,7 @@ int main()
             leftArrowObj.setPosition(0, 0);
             window.draw(leftArrowObj);
 
-            text.setString("Reguli:");
+            text.setString("Rules:");
             text.setCharacterSize(40);
             text.setStyle(sf::Text::Bold);
             text.setFillColor(sf::Color::Blue);
