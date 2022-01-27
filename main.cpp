@@ -130,7 +130,7 @@ int main()
     Button creditsButton(1280 / 2 - 150, 440, 300, 50, "Credits", font, sf::Color::Black, sf::Color::White);
     Button ArrowButton(0, 0, 85, 35, "", font, sf::Color::Transparent, sf::Color::Transparent);
     Button ExitButton(1280 / 2 - 150, 370, 300, 50, "Exit", font, sf::Color::Black, sf::Color::White);
-    Button AudioButton(0, 35, 52, 50, "", font, sf::Color::Transparent, sf::Color::Transparent);
+    Button AudioButton(1200, 55, 52, 50, "", font, sf::Color::Transparent, sf::Color::Transparent);
 
     Button *buttons[100];
     int numButons = 0;
@@ -171,11 +171,11 @@ int main()
     sound.play();
     audio_onObj.setTexture(audio_on);
     audio_onObj.setScale(0.160, 0.160);
-    audio_onObj.setPosition(0, 37);
+    audio_onObj.setPosition(1200, 57);
 
     audio_offObj.setTexture(audio_off);
     audio_offObj.setScale(0.07, 0.065);
-    audio_offObj.setPosition(1.5, 43);
+    audio_offObj.setPosition(1201.5, 63);
 
     while (window.isOpen())
     {
