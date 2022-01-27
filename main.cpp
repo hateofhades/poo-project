@@ -500,6 +500,9 @@ int main()
             }
         }
 
+        if (elapsed1.asSeconds() > 40 * 60)
+            test = -2;
+
         window.clear();
         switch (test)
         {
