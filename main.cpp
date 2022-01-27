@@ -1,6 +1,7 @@
 #include <iostream>
 #include <math.h>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 #include "Classes/QuestionPopup.h"
 #include "Classes/Button.h"
@@ -15,11 +16,33 @@ using namespace std;
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Escape Room Proiect");
-    sf::Texture background, mainMenuBackground, cursor, qMark, leftArrow, logo, cardsImage, wordSearch, questionEight;
-    sf::Sprite backgroundObj, mainMenuBackgroundObj, cursorObj, qMarkObj, leftArrowObj, logoObj, cardsObj, wordSearchObj, questionEightObj;
+    sf::Texture background, mainMenuBackground, cursor, qMark, leftArrow, logo, cardsImage, wordSearch, questionEight, audio_on, audio_off;
+    sf::Sprite backgroundObj, mainMenuBackgroundObj, cursorObj, qMarkObj, leftArrowObj, logoObj, cardsObj, wordSearchObj, questionEightObj, audio_onObj, audio_offObj;
     sf::Font font;
     sf::Text text;
     sf::Clock clock1; // starts the global clock
+    sf::SoundBuffer buffer;
+    sf::Sound sound;
+
+    if (!buffer.loadFromFile("Sources/Sounds/sound.wav"))
+    {
+        return -1;
+    }
+
+    sound.setBuffer(buffer);
+    sound.play();
+    sound.setLoop(true);
+
+    if (!audio_on.loadFromFile("./Sources/Images/on.png"))
+    {
+        cout << "Background could not be loaded";
+        return 1;
+    }
+    if (!audio_off.loadFromFile("./Sources/Images/off.png"))
+    {
+        cout << "Background could not be loaded";
+        return 1;
+    }
 
     if (!background.loadFromFile("./Sources/Images/background.png"))
     {
@@ -107,6 +130,7 @@ int main()
     Button creditsButton(1280 / 2 - 150, 440, 300, 50, "Credits", font, sf::Color::Black, sf::Color::White);
     Button ArrowButton(0, 0, 85, 35, "", font, sf::Color::Transparent, sf::Color::Transparent);
     Button ExitButton(1280 / 2 - 150, 370, 300, 50, "Exit", font, sf::Color::Black, sf::Color::White);
+    Button AudioButton(0, 35, 52, 50, "", font, sf::Color::Transparent, sf::Color::Transparent);
 
     Button *buttons[100];
     int numButons = 0;
@@ -116,6 +140,7 @@ int main()
     buttons[numButons++] = &creditsButton;
     buttons[numButons++] = &ArrowButton;
     buttons[numButons++] = &ExitButton;
+    buttons[numButons++] = &AudioButton;
 
     int test = 0;
     int poz_cursor_x = 640;
@@ -124,12 +149,12 @@ int main()
 
     window.setMouseCursorVisible(false); // hide mouse cursor
 
-    QuestionPopup questionPopup_1("Question 1\nFind the answer below.\nWhich is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", "glucose", font);
+    QuestionPopup questionPopup_1("\nFind the answer below.\nWhich is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", "glucose", font);
     questionPopup_1.addPhoto("./Sources/Images/question.png");
-    Maze mazePopup("Question 1\nFind the answer below.\nWhich is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", "glucose", font);
+    Maze mazePopup("\nWhat is the cause of toxic H2O2 formation?", "celular respiration", font);
     mazePopup.ChangeColor(sf::Color{240, 166, 7, 200});
 
-    QuestionMultipleAnswers multipleAnswer("Which is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", 1, font, "Glucose", "Neither", "Ur moma");
+    QuestionMultipleAnswers multipleAnswer("Based on Gaden model, the yield of substrate\nconversion vs the glucose concentration is:", 3, font, "directly\nproportional", "no connection", "inversely\nproportional");
     multipleAnswer.ChangeColor(sf::Color{178, 237, 40, 200});
     QuestionMultipleAnswers multipleAnswer2("The dependence of product accumulation \nvs inhibitor concentration is: ", 1, font, "Exponential", "Parabolic", "Linear");
     multipleAnswer2.ChangeColor(sf::Color{134, 138, 127, 200});
@@ -137,11 +162,20 @@ int main()
     QuestionCards2 multipleCards2("The equation is a generalization of:", 2, font, cardsObj, "Michaelis-Meneten equation", "Monod equation", "Miller equation");
 
 
-    QuestionWordSearch questionWordSearch_1("Fill in the blanks with the words you find below\nand obtain the password in order to continue.\n\n_________ is the most abundant organic compound in the world\nand is constantly replenished by photosynthesis.\n__________", "1", font);
-    QuestionWordSearch questionWordSearch_2("\nThe enzymatic hydrolysis is a process performed\nin ____________ system, involving the action of soluble\nenzyme (cellulase) on insoluble substrate. \n\n________o_", "2", font);
-    QuestionWordSearch questionWordSearch_3("\nIn general, cellulases secreted by fungi \nconsistof three major classes of components: \nendoglucanases, _______________ and beta-glucosidases.  \n\n_nh___t_on", "3", font);
-    QuestionWordSearch questionWordSearch_4("\nCongratulations!\nYou have obtained the password:\n\ninhibition\n", "4", font);
+    QuestionWordSearch questionWordSearch_1("Fill in the blanks with the words you find below\nand obtain the password in order to continue.\n\n_________ is the most abundant organic compound in the world\nand is constantly replenished by photosynthesis.\n__________", "cellulose", font);
+    QuestionWordSearch questionWordSearch_2("\nThe enzymatic hydrolysis is a process performed\nin ____________ system, involving the action of soluble\nenzyme (cellulase) on insoluble substrate. \n\n________o_", "heterogeneous", font);
+    QuestionWordSearch questionWordSearch_3("\nIn general, cellulases secreted by fungi \nconsistof three major classes of components: \nendoglucanases, _______________ and beta-glucosidases.  \n\n_nh___t_on", "cellobiohydrolases", font);
+    QuestionWordSearch questionWordSearch_4("\nCongratulations!\nYou have obtained the password:\n\ninhibition\n", "inhibition", font);
 
+    int sound_is_on = 1;
+    sound.play();
+    audio_onObj.setTexture(audio_on);
+    audio_onObj.setScale(0.160, 0.160);
+    audio_onObj.setPosition(0, 37);
+
+    audio_offObj.setTexture(audio_off);
+    audio_offObj.setScale(0.07, 0.065);
+    audio_offObj.setPosition(1.5, 43);
 
     while (window.isOpen())
     {
@@ -191,6 +225,20 @@ int main()
                     }
                     break;
                 }
+
+                if (AudioButton.isOver(poz_cursor_x, poz_cursor_y))
+                {
+                    if (sound_is_on == 1)
+                    {
+                        sound.pause();
+                        sound_is_on = 0;
+                    }
+                    else
+                    {
+                        sound.play();
+                        sound_is_on = 1;
+                    }
+                }
             }
 
             if (event.type == sf::Event::MouseMoved)
@@ -207,7 +255,7 @@ int main()
                     else
                     {
                         (*buttons[i]).setBackgroundColor(sf::Color::Black);
-                        if (buttons[i] == &ArrowButton)
+                        if (buttons[i] == &ArrowButton || buttons[i] == &AudioButton)
                         {
                             (*buttons[i]).setBackgroundColor(sf::Color::Transparent);
                         }
@@ -791,6 +839,15 @@ int main()
             window.draw(creditsButton);
 
             text.setString("");
+        }
+        window.draw(AudioButton);
+        if (sound_is_on == 1)
+        {
+            window.draw(audio_onObj);
+        }
+        else
+        {
+            window.draw(audio_offObj);
         }
         // draw cursor
         cursorObj.setPosition(poz_cursor_x, poz_cursor_y);
