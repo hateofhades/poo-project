@@ -16,8 +16,8 @@ using namespace std;
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Escape Room Proiect");
-    sf::Texture background, mainMenuBackground, cursor, qMark, leftArrow, logo, cardsImage, wordSearch, questionEight, audio_on, audio_off;
-    sf::Sprite backgroundObj, mainMenuBackgroundObj, cursorObj, qMarkObj, leftArrowObj, logoObj, cardsObj, wordSearchObj, questionEightObj, audio_onObj, audio_offObj;
+    sf::Texture background, mainMenuBackground, cursor, leftArrow, logo, cardsImage, wordSearch, questionEight, audio_on, audio_off;
+    sf::Sprite backgroundObj, mainMenuBackgroundObj, cursorObj, leftArrowObj, logoObj, cardsObj, wordSearchObj, questionEightObj, audio_onObj, audio_offObj;
     sf::Font font;
     sf::Text text;
     sf::Clock clock1; // starts the global clock
@@ -76,12 +76,6 @@ int main()
     if (!logo.loadFromFile("./Sources/Images/erasmus_logo.png"))
     {
         cout << "Failed to load erasmus_logo.png";
-        return 1;
-    }
-
-    if (!qMark.loadFromFile("./Sources/Images/?.jpg"))
-    {
-        cout << "Failed to load ?.jpg";
         return 1;
     }
 
@@ -569,7 +563,7 @@ int main()
             text.setFillColor(sf::Color::Blue);
             text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 150);
             window.draw(text);
-            text.setString("Apasa <= pentru a reveni la imaginea anterioara\nregula2\nregula3\nregula4");
+            text.setString("\n\n- Follow the instructions for each question to solve the puzzles.\n- You have a time limit of 20 minutes.\n- Click <= to return to the main menu.");
             text.setCharacterSize(22);
             text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 200);
             window.draw(text);
