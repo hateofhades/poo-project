@@ -121,6 +121,7 @@ int main()
 
     QuestionMultipleAnswers multipleAnswer("Which is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", 1, font, "Glucose", "Neither", "Ur moma");
     QuestionCards multipleCards("The following playing cards are given. In black we have the real \nvalues of product concentration, and in red the modeled values [* 10 g / L), \nfor 4 successive values of inhibitor concentration (0, 10, 25, 40). \nSpecify whether it is a model with inhibition or not.", 2, font, cardsObj, "Yes", "No answer can be given", "No");
+    QuestionCards multipleCards2("The following formula is given. In black we have the real \nvalues of product concentration, and in red the modeled values [* 10 g / L), \nfor 4 successive values of inhibitor concentration (0, 10, 25, 40). \nSpecify whether it is a model with inhibition or not.", 2, font, cardsObj, "Yes", "No answer can be given", "No");
     QuestionMultipleAnswers multipleAnswer2("Which is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", 3, font, "Glucose", "Neither", "Ur moma");
 
 
@@ -364,6 +365,18 @@ int main()
                             input_is_wrong = 1;
                         }
                     }
+                    else if (test == 13)
+                    {
+                        if (multipleCards2.getSelected() == multipleCards2.getCorrectAnswer())
+                        {
+                            test = 14;
+                        }
+                        else
+                        {
+                            multipleCards2.setHint("Your answer is wrong!");
+                            input_is_wrong = 1;
+                        }
+                    }
                 }
             }
             // delete all text at once if input answer is wrong
@@ -420,6 +433,14 @@ int main()
                 multipleAnswer2.selectAnswer(selected);
                 input_is_wrong = 0;
                 multipleAnswer2.setHint("Press Enter to submit your answer and 1, 2 or 3 to select an answer.");
+            }
+            else if (test == 13 && (event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::Num3 || event.key.code == sf::Keyboard::Numpad1 || event.key.code == sf::Keyboard::Numpad2 || event.key.code == sf::Keyboard::Numpad3))
+            {
+                int selected = (event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::Numpad1) ? 1 : (event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::Numpad2) ? 2
+                                                                                                                                                                                                         : 3;
+                multipleCards2.selectAnswer(selected);
+                input_is_wrong = 0;
+                multipleCards2.setHint("Press Enter to submit your answer and 1, 2 or 3 to select an answer.");
             }
 
             if (event.type == sf::Event::TextEntered)
@@ -681,6 +702,26 @@ int main()
             break;
 
         case 13:
+            window.draw(backgroundObj);
+            window.draw(ArrowButton);
+
+            leftArrowObj.setPosition(0, 0);
+            window.draw(leftArrowObj);
+
+            window.draw(multipleCards2);
+            window.draw(cardsObj);
+
+            window.draw(text);
+
+            text.setFillColor(sf::Color::Magenta);
+            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setCharacterSize(30);
+            text.setPosition(1111, 22);
+            window.draw(text);
+
+            break;
+
+        case 14:
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
