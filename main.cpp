@@ -521,7 +521,7 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setString(std::to_string(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
             text.setPosition(1111, 22);
             window.draw(text);
@@ -540,7 +540,7 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setString(std::to_string(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
             text.setPosition(1111, 22);
             window.draw(text);
@@ -558,7 +558,7 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setString(std::to_string(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
             text.setPosition(1111, 22);
             window.draw(text);
@@ -577,7 +577,7 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setString(std::to_string(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
             text.setPosition(1111, 22);
             window.draw(text);
@@ -597,7 +597,7 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setString(std::to_string(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
             text.setPosition(1111, 22);
             window.draw(text);
@@ -616,7 +616,7 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setString(std::to_string(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
             text.setPosition(1111, 22);
             window.draw(text);
@@ -636,7 +636,7 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setString(std::to_string(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
             text.setPosition(1111, 22);
             window.draw(text);
@@ -656,7 +656,7 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setString(std::to_string(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
             text.setPosition(1111, 22);
             window.draw(text);
@@ -674,7 +674,7 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setString(std::to_string(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
             text.setPosition(1111, 22);
             window.draw(text);
