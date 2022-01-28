@@ -24,7 +24,7 @@ QuestionMultipleAnswers::QuestionMultipleAnswers(string question, int correctAns
 
     // Show possible answers and their checkboxes
     this->box1.setSize(sf::Vector2f(this->background.getSize().x / 2 - 100, this->background.getSize().y / 8));
-    this->box1.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->box1.getSize().x) / 2, this->background.getPosition().y + this->questionTxt.getLocalBounds().height + this->box1.getSize().y + 10);
+    this->box1.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->box1.getSize().x) / 2, this->background.getPosition().y + 70 + this->questionTxt.getLocalBounds().height + this->box1.getSize().y + 10);
     this->box1.setFillColor(sf::Color::White);
     this->box1.setOutlineColor(sf::Color::Black);
     this->box1.setOutlineThickness(2);
@@ -37,7 +37,7 @@ QuestionMultipleAnswers::QuestionMultipleAnswers(string question, int correctAns
     this->answer1Txt.setPosition(this->box1.getPosition().x + (this->box1.getSize().x - this->answer1Txt.getLocalBounds().width) / 2, this->box1.getPosition().y + (this->box1.getSize().y - this->answer1Txt.getLocalBounds().height) / 2);
 
     this->box2.setSize(sf::Vector2f(this->background.getSize().x / 2 - 100, this->background.getSize().y / 8));
-    this->box2.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->box2.getSize().x) / 2, this->background.getPosition().y + this->questionTxt.getLocalBounds().height + 10 + this->box1.getSize().y + 10 + this->box2.getSize().y);
+    this->box2.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->box2.getSize().x) / 2, this->background.getPosition().y + 70 + this->questionTxt.getLocalBounds().height + 10 + this->box1.getSize().y + 10 + this->box2.getSize().y);
     this->box2.setFillColor(sf::Color::White);
     this->box2.setOutlineColor(sf::Color::Black);
     this->box2.setOutlineThickness(2);
@@ -50,7 +50,7 @@ QuestionMultipleAnswers::QuestionMultipleAnswers(string question, int correctAns
     this->answer2Txt.setPosition(this->box2.getPosition().x + (this->box2.getSize().x - this->answer2Txt.getLocalBounds().width) / 2, this->box2.getPosition().y + (this->box2.getSize().y - this->answer2Txt.getLocalBounds().height) / 2);
 
     this->box3.setSize(sf::Vector2f(this->background.getSize().x / 2 - 100, this->background.getSize().y / 8));
-    this->box3.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->box3.getSize().x) / 2, this->background.getPosition().y + this->questionTxt.getLocalBounds().height + 10 + this->box1.getSize().y + 10 + this->box2.getSize().y + 10 + this->box3.getSize().y);
+    this->box3.setPosition(this->background.getPosition().x + (this->background.getSize().x - this->box3.getSize().x) / 2, this->background.getPosition().y + 70 + this->questionTxt.getLocalBounds().height + 10 + this->box1.getSize().y + 10 + this->box2.getSize().y + 10 + this->box3.getSize().y);
     this->box3.setFillColor(sf::Color::White);
     this->box3.setOutlineColor(sf::Color::Black);
     this->box3.setOutlineThickness(2);
@@ -71,7 +71,10 @@ QuestionMultipleAnswers::QuestionMultipleAnswers(string question, int correctAns
 
     this->selectAnswer(1);
 };
-
+void QuestionMultipleAnswers::ChangeColor(sf::Color color)
+{
+    this->background.setFillColor(color);
+}
 void QuestionMultipleAnswers::selectAnswer(int number)
 {
     this->selectedAnswer = number;

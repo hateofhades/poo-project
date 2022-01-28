@@ -21,6 +21,7 @@ public:
     string getQuestion();
     string getAnswer(int number);
     int getCorrectAnswer();
+    void ChangeColor(sf::Color color);
     void setBackgroundSize(int width, int height);
     void selectAnswer(int number);
     void setHint(string text);

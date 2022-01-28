@@ -10,7 +10,7 @@ QuestionPopup::QuestionPopup(string question, string correctAnswer, sf::Font fon
 
     this->background.setSize(sf::Vector2f(550, 470));
     this->background.setPosition(1280 / 2 - this->background.getSize().x / 2, 720 / 2 - this->background.getSize().y / 2);
-    this->background.setFillColor(sf::Color::Blue);
+    this->background.setFillColor(sf::Color{36, 171, 72, 165});
     this->question.setString(question);
     this->question.setCharacterSize(24);
     this->question.setFillColor(sf::Color::White);

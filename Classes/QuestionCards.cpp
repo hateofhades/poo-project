@@ -12,7 +12,7 @@ QuestionCards::QuestionCards(string question, int correctAnswer, sf::Font font, 
 
     this->background.setSize(sf::Vector2f(900, 600));
     this->background.setPosition(1280 / 2 - this->background.getSize().x / 2, 720 / 2 - this->background.getSize().y / 2);
-    this->background.setFillColor(sf::Color::Blue);
+    this->background.setFillColor(sf::Color{21, 212, 205, 170});
 
     this->questionTxt.setString(this->question);
     this->questionTxt.setCharacterSize(20);

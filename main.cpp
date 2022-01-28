@@ -1,12 +1,14 @@
 #include <iostream>
 #include <math.h>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 #include "Classes/QuestionPopup.h"
 #include "Classes/Button.h"
 #include "Classes/Maze.h"
 #include "Classes/QuestionMultipleAnswers.h"
 #include "Classes/QuestionCards.h"
+#include "Classes/QuestionCards2.h"
 #include "Classes/QuestionWordSearch.h"
 
 using namespace std;
@@ -14,13 +16,40 @@ using namespace std;
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Escape Room Proiect");
-    sf::Texture background, mainMenuBackground, cursor, qMark, leftArrow, logo, cardsImage, wordSearch;
-    sf::Sprite backgroundObj, mainMenuBackgroundObj, cursorObj, qMarkObj, leftArrowObj, logoObj, cardsObj, wordSearchObj;
+    sf::Texture background, mainMenuBackground, cursor, leftArrow, logo, cardsImage, wordSearch, questionEight, audio_on, audio_off;
+    sf::Sprite backgroundObj, mainMenuBackgroundObj, cursorObj, leftArrowObj, logoObj, cardsObj, wordSearchObj, questionEightObj, audio_onObj, audio_offObj;
     sf::Font font;
     sf::Text text;
     sf::Clock clock1; // starts the global clock
+    sf::SoundBuffer buffer;
+    sf::Sound sound;
+
+    if (!buffer.loadFromFile("Sources/Sounds/sound.wav"))
+    {
+        return -1;
+    }
+
+    sound.setBuffer(buffer);
+    sound.play();
+    sound.setLoop(true);
+
+    if (!audio_on.loadFromFile("./Sources/Images/on.png"))
+    {
+        cout << "Background could not be loaded";
+        return 1;
+    }
+    if (!audio_off.loadFromFile("./Sources/Images/off.png"))
+    {
+        cout << "Background could not be loaded";
+        return 1;
+    }
 
     if (!background.loadFromFile("./Sources/Images/background.png"))
+    {
+        cout << "Background could not be loaded";
+        return 1;
+    }
+    if(!questionEight.loadFromFile("./Sources/Images/question_eight.png"))
     {
         cout << "Background could not be loaded";
         return 1;
@@ -47,12 +76,6 @@ int main()
     if (!logo.loadFromFile("./Sources/Images/erasmus_logo.png"))
     {
         cout << "Failed to load erasmus_logo.png";
-        return 1;
-    }
-
-    if (!qMark.loadFromFile("./Sources/Images/?.jpg"))
-    {
-        cout << "Failed to load ?.jpg";
         return 1;
     }
 
@@ -92,12 +115,16 @@ int main()
     wordSearchObj.setTexture(wordSearch);
     wordSearchObj.setScale(0.7, 0.7);
     wordSearchObj.setPosition(365, 230);
+    questionEightObj.setTexture(questionEight);
+    questionEightObj.setScale(0.9, 0.9);
+    questionEightObj.setPosition(440, 160);
 
     Button startButton(1280 / 2 - 150, 300, 300, 50, "Start", font, sf::Color::Black, sf::Color::White);
     Button rulesButton(1280 / 2 - 150, 370, 300, 50, "Rules", font, sf::Color::Black, sf::Color::White);
     Button creditsButton(1280 / 2 - 150, 440, 300, 50, "Credits", font, sf::Color::Black, sf::Color::White);
     Button ArrowButton(0, 0, 85, 35, "", font, sf::Color::Transparent, sf::Color::Transparent);
     Button ExitButton(1280 / 2 - 150, 370, 300, 50, "Exit", font, sf::Color::Black, sf::Color::White);
+    Button AudioButton(1200, 55, 52, 50, "", font, sf::Color::Transparent, sf::Color::Transparent);
 
     Button *buttons[100];
     int numButons = 0;
@@ -107,6 +134,7 @@ int main()
     buttons[numButons++] = &creditsButton;
     buttons[numButons++] = &ArrowButton;
     buttons[numButons++] = &ExitButton;
+    buttons[numButons++] = &AudioButton;
 
     int test = 0;
     int poz_cursor_x = 640;
@@ -115,19 +143,33 @@ int main()
 
     window.setMouseCursorVisible(false); // hide mouse cursor
 
-    QuestionPopup questionPopup_1("Question 1\nFind the answer below.\nWhich is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", "glucose", font);
+    QuestionPopup questionPopup_1("\nFind the answer below.\nWhich is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", "glucose", font);
     questionPopup_1.addPhoto("./Sources/Images/question.png");
-    Maze mazePopup("Question 1\nFind the answer below.\nWhich is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", "glucose", font);
+    Maze mazePopup("\nWhat is the cause of toxic H2O2 formation?", "celular respiration", font);
+    mazePopup.ChangeColor(sf::Color{240, 166, 7, 200});
 
-    QuestionMultipleAnswers multipleAnswer("Which is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", 1, font, "Glucose", "Neither", "Ur moma");
-    QuestionMultipleAnswers multipleAnswer2("Which is the inhibitor in an enzymatic\nhydrolysis of wheat straw bioprocess?", 3, font, "Glucose", "Neither", "Ur moma");
+    QuestionMultipleAnswers multipleAnswer("Based on Gaden model, the yield of substrate\nconversion vs the glucose concentration is:", 3, font, "directly\nproportional", "no connection", "inversely\nproportional");
+    multipleAnswer.ChangeColor(sf::Color{178, 237, 40, 200});
+    QuestionMultipleAnswers multipleAnswer2("The dependence of product accumulation \nvs inhibitor concentration is: ", 1, font, "Exponential", "Parabolic", "Linear");
+    multipleAnswer2.ChangeColor(sf::Color{134, 138, 127, 200});
     QuestionCards multipleCards("The following playing cards are given. In black we have the real \nvalues of product concentration, and in red the modeled values [* 10 g / L), \nfor 4 successive values of inhibitor concentration (0, 10, 25, 40). \nSpecify whether it is a model with inhibition or not.", 2, font, cardsObj, "Yes", "No answer can be given", "No");
+    QuestionCards2 multipleCards2("The equation is a generalization of:", 2, font, cardsObj, "Michaelis-Meneten equation", "Monod equation", "Miller equation");
 
-    QuestionWordSearch questionWordSearch_1("Fill in the blanks with the words you find below\nand obtain the password in order to continue.\n\n_________ is the most abundant organic compound in the world\nand is constantly replenished by photosynthesis.\n__________", "1", font);
-    QuestionWordSearch questionWordSearch_2("\nThe enzymatic hydrolysis is a process performed\nin ____________ system, involving the action of soluble\nenzyme (cellulase) on insoluble substrate. \n\n________o_", "2", font);
-    QuestionWordSearch questionWordSearch_3("\nIn general, cellulases secreted by fungi \nconsistof three major classes of components: \nendoglucanases, _______________ and beta-glucosidases.  \n\n_nh___t_on", "3", font);
-    QuestionWordSearch questionWordSearch_4("\nCongratulations!\nYou have obtained the password:\n\ninhibition\n", "4", font);
 
+    QuestionWordSearch questionWordSearch_1("Fill in the blanks with the words you find below\nand obtain the password in order to continue.\n\n_________ is the most abundant organic compound in the world\nand is constantly replenished by photosynthesis.\n__________", "cellulose", font);
+    QuestionWordSearch questionWordSearch_2("\nThe enzymatic hydrolysis is a process performed\nin ____________ system, involving the action of soluble\nenzyme (cellulase) on insoluble substrate. \n\n________o_", "heterogeneous", font);
+    QuestionWordSearch questionWordSearch_3("\nIn general, cellulases secreted by fungi \nconsistof three major classes of components: \nendoglucanases, _______________ and beta-glucosidases.  \n\n_nh___t_on", "cellobiohydrolases", font);
+    QuestionWordSearch questionWordSearch_4("\nCongratulations!\nYou have obtained the password:\n\ninhibition\n", "inhibition", font);
+
+    int sound_is_on = 1;
+    sound.play();
+    audio_onObj.setTexture(audio_on);
+    audio_onObj.setScale(0.160, 0.160);
+    audio_onObj.setPosition(1200, 57);
+
+    audio_offObj.setTexture(audio_off);
+    audio_offObj.setScale(0.07, 0.065);
+    audio_offObj.setPosition(1201.5, 63);
 
     while (window.isOpen())
     {
@@ -177,6 +219,20 @@ int main()
                     }
                     break;
                 }
+
+                if (AudioButton.isOver(poz_cursor_x, poz_cursor_y))
+                {
+                    if (sound_is_on == 1)
+                    {
+                        sound.pause();
+                        sound_is_on = 0;
+                    }
+                    else
+                    {
+                        sound.play();
+                        sound_is_on = 1;
+                    }
+                }
             }
 
             if (event.type == sf::Event::MouseMoved)
@@ -193,7 +249,7 @@ int main()
                     else
                     {
                         (*buttons[i]).setBackgroundColor(sf::Color::Black);
-                        if (buttons[i] == &ArrowButton)
+                        if (buttons[i] == &ArrowButton || buttons[i] == &AudioButton)
                         {
                             (*buttons[i]).setBackgroundColor(sf::Color::Transparent);
                         }
@@ -363,6 +419,19 @@ int main()
                             input_is_wrong = 1;
                         }
                     }
+                    else if(test == 13)
+                    {
+                        
+                        if (multipleCards2.getSelected() == multipleCards2.getCorrectAnswer())
+                        {
+                            test = -1;
+                        }
+                        else
+                        {
+                            multipleCards2.setHint("Your answer is wrong!");
+                            input_is_wrong = 1;
+                        }
+                    }
                 }
             }
             // delete all text at once if input answer is wrong
@@ -409,7 +478,7 @@ int main()
             }
             else if (event.key.code != sf::Keyboard::Enter && event.type == sf::Event::KeyPressed && input_is_wrong == 1 && test == 11)
             {
-                questionWordSearch_3.setInputAnswer("");
+                questionWordSearch_4.setInputAnswer("");
                 input_is_wrong = 0;
             }
             else if (test == 12 && (event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::Num3 || event.key.code == sf::Keyboard::Numpad1 || event.key.code == sf::Keyboard::Numpad2 || event.key.code == sf::Keyboard::Numpad3))
@@ -419,6 +488,14 @@ int main()
                 multipleAnswer2.selectAnswer(selected);
                 input_is_wrong = 0;
                 multipleAnswer2.setHint("Press Enter to submit your answer and 1, 2 or 3 to select an answer.");
+            }
+            else if (test == 13 && (event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::Num3 || event.key.code == sf::Keyboard::Numpad1 || event.key.code == sf::Keyboard::Numpad2 || event.key.code == sf::Keyboard::Numpad3))
+            {
+                int selected = (event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::Numpad1) ? 1 : (event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::Numpad2) ? 2
+                                                                                                                                                                                                         : 3;
+                multipleCards2.selectAnswer(selected);
+                input_is_wrong = 0;
+                multipleCards2.setHint("Press Enter to submit your answer and 1, 2 or 3 to select an answer.");
             }
 
             if (event.type == sf::Event::TextEntered)
@@ -468,6 +545,9 @@ int main()
             }
         }
 
+        if (elapsed1.asSeconds() > 20 * 60)
+            test = -2;
+
         window.clear();
         switch (test)
         {
@@ -477,13 +557,13 @@ int main()
             leftArrowObj.setPosition(0, 0);
             window.draw(leftArrowObj);
 
-            text.setString("Reguli:");
+            text.setString("Rules:");
             text.setCharacterSize(40);
             text.setStyle(sf::Text::Bold);
             text.setFillColor(sf::Color::Blue);
             text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 150);
             window.draw(text);
-            text.setString("Apasa <= pentru a reveni la imaginea anterioara\nregula2\nregula3\nregula4");
+            text.setString("\n\n- Follow the instructions for each question to solve the puzzles.\n- You have a time limit of 20 minutes.\n- Click <= to return to the main menu.");
             text.setCharacterSize(22);
             text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 200);
             window.draw(text);
@@ -679,14 +759,24 @@ int main()
             text.setPosition(1111, 22);
             window.draw(text);
             break;
-
         case 13:
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
             leftArrowObj.setPosition(0, 0);
             window.draw(leftArrowObj);
+
+            window.draw(multipleCards2);
+            window.draw(questionEightObj);
+
             window.draw(text);
+
+            text.setFillColor(sf::Color::Magenta);
+            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setCharacterSize(30);
+            text.setPosition(1111, 22);
+            window.draw(text);
+
             break;
 
         case -1: // won the game
@@ -743,6 +833,15 @@ int main()
             window.draw(creditsButton);
 
             text.setString("");
+        }
+        window.draw(AudioButton);
+        if (sound_is_on == 1)
+        {
+            window.draw(audio_onObj);
+        }
+        else
+        {
+            window.draw(audio_offObj);
         }
         // draw cursor
         cursorObj.setPosition(poz_cursor_x, poz_cursor_y);

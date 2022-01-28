@@ -10,7 +10,7 @@ QuestionWordSearch::QuestionWordSearch(string question, string correctAnswer, sf
 
     this->background.setSize(sf::Vector2f(800, 700));
     this->background.setPosition(1280 / 2 - this->background.getSize().x / 2, 720 / 2 - this->background.getSize().y / 2);
-    this->background.setFillColor(sf::Color::Blue);
+    this->background.setFillColor(sf::Color{66, 135, 245, 170});
     this->question.setString(question);
     this->question.setCharacterSize(24);
     this->question.setFillColor(sf::Color::White);
