@@ -120,7 +120,7 @@ int main()
     questionEightObj.setPosition(440, 160);
 
     Button startButton(1280 / 2 - 150, 300, 300, 50, "Start", font, sf::Color::Black, sf::Color::White);
-    Button rulesButton(1280 / 2 - 150, 370, 300, 50, "Rules", font, sf::Color::Black, sf::Color::White);
+    Button rulesButton(1280 / 2 - 150, 370, 300, 50, "Guide", font, sf::Color::Black, sf::Color::White);
     Button creditsButton(1280 / 2 - 150, 440, 300, 50, "Credits", font, sf::Color::Black, sf::Color::White);
     Button ArrowButton(0, 0, 85, 35, "", font, sf::Color::Transparent, sf::Color::Transparent);
     Button ExitButton(1280 / 2 - 150, 370, 300, 50, "Exit", font, sf::Color::Black, sf::Color::White);
@@ -557,15 +557,15 @@ int main()
             leftArrowObj.setPosition(0, 0);
             window.draw(leftArrowObj);
 
-            text.setString("Rules:");
+            text.setString("Guide:");
             text.setCharacterSize(40);
             text.setStyle(sf::Text::Bold);
             text.setFillColor(sf::Color::Blue);
             text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 150);
             window.draw(text);
-            text.setString("\n\n- Follow the instructions for each question to solve the puzzles.\n- You have a time limit of 20 minutes.\n- Click <= to return to the main menu.");
+            text.setString("\n\n- Follow the instructions for each question to solve the puzzles.\n- You have a time limit of 20 minutes (1200 seconds).\n- Click the arrow in the upper left corner to return \nto the main menu.\n\n- Link to documentation:\nhttps://drive.google.com/file/d/1d6DwTIV_\nLtSjXWFPe7bejttgaXbjGDgt/view?usp=sharing\n\n- Link to Bioprocess Intelligent Control (Part 3):\nhttps://drive.google.com/file/d/1LoWLbg70tpKp\n38s76LcxKC7EWLAzOphT/view?usp=sharing");
             text.setCharacterSize(22);
-            text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 200);
+            text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 180);
             window.draw(text);
             break;
         case 3: // credits
@@ -772,7 +772,7 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(elapsed1.asSeconds()));
+            text.setString(std::to_string(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
             text.setPosition(1111, 22);
             window.draw(text);
