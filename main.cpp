@@ -13,6 +13,19 @@
 
 using namespace std;
 
+string returnTime(int timeElapsed)
+{
+    int min = 0;
+    char dp = ':';
+    min = timeElapsed / 60;
+    if (timeElapsed > 60)
+        timeElapsed -= 60;
+    string timer = std::to_string(min);
+    timer.push_back(dp);
+    timer.append(std::to_string(timeElapsed));
+    return timer;
+}
+
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Escape Room Proiect");
@@ -38,6 +51,7 @@ int main()
         cout << "Background could not be loaded";
         return 1;
     }
+
     if (!audio_off.loadFromFile("./Sources/Images/off.png"))
     {
         cout << "Background could not be loaded";
@@ -49,6 +63,7 @@ int main()
         cout << "Background could not be loaded";
         return 1;
     }
+
     if(!questionEight.loadFromFile("./Sources/Images/question_eight.png"))
     {
         cout << "Background could not be loaded";
@@ -549,9 +564,11 @@ int main()
             test = -2;
 
         window.clear();
+        
         switch (test)
         {
         case 2: // rules menu
+        {
             window.draw(mainMenuBackgroundObj);
             window.draw(ArrowButton);
             leftArrowObj.setPosition(0, 0);
@@ -568,7 +585,9 @@ int main()
             text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 180);
             window.draw(text);
             break;
+        }
         case 3: // credits
+        {
             window.draw(mainMenuBackgroundObj);
             window.draw(ArrowButton);
             leftArrowObj.setPosition(0, 0);
@@ -587,9 +606,10 @@ int main()
 
             logoObj.setPosition(1000, 600);
             window.draw(logoObj);
-
             break;
+        }
         case 4: // question 1
+        {
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
@@ -601,14 +621,14 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(int(elapsed1.asSeconds())));
+            text.setString(returnTime(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
-            text.setPosition(1111, 22);
+            text.setPosition(1200, 20);
             window.draw(text);
-
             break;
-
+        }
         case 5: // question 2
+        {
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
@@ -620,13 +640,14 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(int(elapsed1.asSeconds())));
+            text.setString(returnTime(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
-            text.setPosition(1111, 22);
+            text.setPosition(1200, 20);
             window.draw(text);
             break;
-
+        }
         case 6: // question 3
+        {
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
@@ -638,13 +659,14 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(int(elapsed1.asSeconds())));
+            text.setString(returnTime(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
-            text.setPosition(1111, 22);
+            text.setPosition(1200, 20);
             window.draw(text);
             break;
-
+        }
         case 7: // question 4
+        {
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
@@ -657,14 +679,14 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(int(elapsed1.asSeconds())));
+            text.setString(returnTime(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
-            text.setPosition(1111, 22);
+            text.setPosition(1200, 20);
             window.draw(text);
-
             break;
-
-        case 8: // question 5
+        }
+        case 8: // question 5-1
+        {
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
@@ -677,13 +699,14 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(int(elapsed1.asSeconds())));
+            text.setString(returnTime(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
-            text.setPosition(1111, 22);
+            text.setPosition(1200, 20);
             window.draw(text);
-
             break;
-        case 9:
+        }
+        case 9: // question 5-2
+        {
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
@@ -696,14 +719,15 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(int(elapsed1.asSeconds())));
+            text.setString(returnTime(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
-            text.setPosition(1111, 22);
+            text.setPosition(1200, 20);
             window.draw(text);
-
             break;
+        }
 
-        case 10:
+        case 10: // question 5-3
+        {
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
@@ -716,14 +740,14 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(int(elapsed1.asSeconds())));
+            text.setString(returnTime(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
-            text.setPosition(1111, 22);
+            text.setPosition(1200, 20);
             window.draw(text);
-
             break;
-
-        case 11:
+        }
+        case 11: // question 5-4
+        {
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
@@ -736,13 +760,14 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(int(elapsed1.asSeconds())));
+            text.setString(returnTime(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
-            text.setPosition(1111, 22);
+            text.setPosition(1200, 20);
             window.draw(text);
-
             break;
-        case 12:
+        }
+        case 12: // question 6
+        {
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
@@ -754,12 +779,14 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(int(elapsed1.asSeconds())));
+            text.setString(returnTime(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
-            text.setPosition(1111, 22);
+            text.setPosition(1200, 20);
             window.draw(text);
             break;
-        case 13:
+        }
+        case 13: // question 7
+        {
             window.draw(backgroundObj);
             window.draw(ArrowButton);
 
@@ -772,14 +799,14 @@ int main()
             window.draw(text);
 
             text.setFillColor(sf::Color::Magenta);
-            text.setString(std::to_string(int(elapsed1.asSeconds())));
+            text.setString(returnTime(int(elapsed1.asSeconds())));
             text.setCharacterSize(30);
-            text.setPosition(1111, 22);
+            text.setPosition(1200, 20);
             window.draw(text);
-
             break;
-
+        }
         case -1: // won the game
+        {
             window.draw(mainMenuBackgroundObj);
 
             text.setString("Congratulations!");
@@ -796,7 +823,9 @@ int main()
 
             window.draw(ExitButton);
             break;
+        }
         case -2: // lost the game
+        {
             window.draw(mainMenuBackgroundObj);
 
             text.setString("Game over!");
@@ -812,9 +841,9 @@ int main()
             window.draw(text);
             window.draw(ExitButton);
             break;
-
+        }
         default: // main menu
-
+        {
             window.draw(mainMenuBackgroundObj);
 
             text.setString("Learning about a bioprocess");
@@ -834,6 +863,8 @@ int main()
 
             text.setString("");
         }
+        }
+
         window.draw(AudioButton);
         if (sound_is_on == 1)
         {
