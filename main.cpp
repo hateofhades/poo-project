@@ -64,7 +64,7 @@ int main()
         return 1;
     }
 
-    if(!questionEight.loadFromFile("./Sources/Images/question_eight.png"))
+    if (!questionEight.loadFromFile("./Sources/Images/question_eight.png"))
     {
         cout << "Background could not be loaded";
         return 1;
@@ -140,6 +140,8 @@ int main()
     Button ArrowButton(0, 0, 85, 35, "", font, sf::Color::Transparent, sf::Color::Transparent);
     Button ExitButton(1280 / 2 - 150, 370, 300, 50, "Exit", font, sf::Color::Black, sf::Color::White);
     Button AudioButton(1200, 55, 52, 50, "", font, sf::Color::Transparent, sf::Color::Transparent);
+    Button Link1(309, 358, 510, 75, "", font, sf::Color::Transparent, sf::Color::White);
+    Button Link2(309, 458, 510, 75, "", font, sf::Color::Transparent, sf::Color::Transparent);
 
     Button *buttons[100];
     int numButons = 0;
@@ -150,11 +152,14 @@ int main()
     buttons[numButons++] = &ArrowButton;
     buttons[numButons++] = &ExitButton;
     buttons[numButons++] = &AudioButton;
+    buttons[numButons++] = &Link1;
+    buttons[numButons++] = &Link2;
 
     int test = 0;
     int poz_cursor_x = 640;
     int poz_cursor_y = 360;
     int input_is_wrong = 2;
+    int link = 0;
 
     window.setMouseCursorVisible(false); // hide mouse cursor
 
@@ -169,7 +174,6 @@ int main()
     multipleAnswer2.ChangeColor(sf::Color{134, 138, 127, 200});
     QuestionCards multipleCards("The following playing cards are given. In black we have the real \nvalues of product concentration, and in red the modeled values [* 10 g / L), \nfor 4 successive values of inhibitor concentration (0, 10, 25, 40). \nSpecify whether it is a model with inhibition or not.", 2, font, cardsObj, "Yes", "No answer can be given", "No");
     QuestionCards2 multipleCards2("The equation is a generalization of:", 2, font, cardsObj, "Michaelis-Meneten equation", "Monod equation", "Miller equation");
-
 
     QuestionWordSearch questionWordSearch_1("Fill in the blanks with the words you find below\nand obtain the password in order to continue.\n\n_________ is the most abundant organic compound in the world\nand is constantly replenished by photosynthesis.\n__________", "cellulose", font);
     QuestionWordSearch questionWordSearch_2("\nThe enzymatic hydrolysis is a process performed\nin ____________ system, involving the action of soluble\nenzyme (cellulase) on insoluble substrate. \n\n________o_", "heterogeneous", font);
@@ -203,6 +207,24 @@ int main()
                 poz_cursor_x = sf::Mouse::getPosition(window).x;
                 poz_cursor_y = sf::Mouse::getPosition(window).y;
 
+                if (Link1.isOver(poz_cursor_x, poz_cursor_y) && link == 1)
+                // WIN32 = we're in windows
+                #ifdef _WIN32
+                // Windows
+                system("start https://drive.google.com/file/d/1d6DwTIV_LtSjXWFPe7bejttgaXbjGDgt/view?usp=sharing");
+                #else
+                system("xdg-open https://drive.google.com/file/d/1d6DwTIV_LtSjXWFPe7bejttgaXbjGDgt/view?usp=sharing");
+                #endif
+
+                if (Link2.isOver(poz_cursor_x, poz_cursor_y) && link == 1)
+                // WIN32 = we're in windows
+                #ifdef _WIN32
+                // Windows
+                system("start https://drive.google.com/file/d/1LoWLbg70tpKp38s76LcxKC7EWLAzOphT/view?usp=sharing");
+                #else
+                system("xdg-open https://drive.google.com/file/d/1LoWLbg70tpKp38s76LcxKC7EWLAzOphT/view?usp=sharing");
+                #endif
+
                 switch (test)
                 {
                 case 0:
@@ -215,6 +237,7 @@ int main()
                     if (rulesButton.isOver(poz_cursor_x, poz_cursor_y))
                     {
                         test = 2;
+                        link = 1;
                     }
                     if (creditsButton.isOver(poz_cursor_x, poz_cursor_y))
                     {
@@ -225,6 +248,7 @@ int main()
                     if (ArrowButton.isOver(poz_cursor_x, poz_cursor_y))
                     {
                         test = 0;
+                        link = 0;
                     }
                     break;
                 case -2 ... - 1:
@@ -260,11 +284,13 @@ int main()
                     if ((*buttons[i]).isOver(poz_cursor_x, poz_cursor_y))
                     {
                         (*buttons[i]).setBackgroundColor(sf::Color::Blue);
+                        if (buttons[i] == &Link1 || buttons[i] == &Link2)
+                            (*buttons[i]).setBackgroundColor(sf::Color{237, 206, 183, 100});
                     }
                     else
                     {
                         (*buttons[i]).setBackgroundColor(sf::Color::Black);
-                        if (buttons[i] == &ArrowButton || buttons[i] == &AudioButton)
+                        if (buttons[i] == &ArrowButton || buttons[i] == &AudioButton || buttons[i] == &Link1 || buttons[i] == &Link2)
                         {
                             (*buttons[i]).setBackgroundColor(sf::Color::Transparent);
                         }
@@ -434,9 +460,8 @@ int main()
                             input_is_wrong = 1;
                         }
                     }
-                    else if(test == 13)
+                    else if (test == 13)
                     {
-                        
                         if (multipleCards2.getSelected() == multipleCards2.getCorrectAnswer())
                         {
                             test = -1;
@@ -564,7 +589,6 @@ int main()
             test = -2;
 
         window.clear();
-        
         switch (test)
         {
         case 2: // rules menu
@@ -580,7 +604,10 @@ int main()
             text.setFillColor(sf::Color::Blue);
             text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 150);
             window.draw(text);
-            text.setString("\n\n- Follow the instructions for each question to solve the puzzles.\n- You have a time limit of 20 minutes (1200 seconds).\n- Click the arrow in the upper left corner to return \nto the main menu.\n\n- Link to documentation:\nhttps://drive.google.com/file/d/1d6DwTIV_\nLtSjXWFPe7bejttgaXbjGDgt/view?usp=sharing\n\n- Link to Bioprocess Intelligent Control (Part 3):\nhttps://drive.google.com/file/d/1LoWLbg70tpKp\n38s76LcxKC7EWLAzOphT/view?usp=sharing");
+
+            window.draw(Link1);
+            window.draw(Link2);
+            text.setString("\n\n- Follow the instructions for each question to solve the puzzles.\n- You have a time limit of 20 minutes.\n- Click the arrow in the upper left corner to return \nto the main menu.\n\n- Link to documentation:\nhttps://drive.google.com/file/d/1d6DwTIV_\nLtSjXWFPe7bejttgaXbjGDgt/view?usp=sharing\n\n- Link to Bioprocess Intelligent Control (Part 3):\nhttps://drive.google.com/file/d/1LoWLbg70tpKp\n38s76LcxKC7EWLAzOphT/view?usp=sharing");
             text.setCharacterSize(22);
             text.setPosition(1280 / 2 - text.getLocalBounds().width / 2, 180);
             window.draw(text);
